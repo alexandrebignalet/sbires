@@ -1,10 +1,10 @@
 require 'sbires/version'
-require 'securerandom'
 
 module Sbires
   class Error < StandardError; end
 
   LORD_NAMES = ["De Sinople", "D'Azure", "De Gueules", "D'Or", "D'Argent"]
+  NEIGHBOURS_NAMES = ["Le Château", "La Taverne", "La Salle d'Armes", "La Grand Place", "L'Eglise"]
   MIN_PLAYERS_IN_GAME = 2
   MAX_PLAYERS_IN_GAME = 5
 
@@ -17,9 +17,40 @@ module Sbires
 
       @players = prepare_players(players)
       @current_player = @players.sample.lord_name
+      @neighbours = create_neighbours
+    end
+
+    def place_peon(lord_name, neighbour_name)
+      player = players.detect { |p| p.lord_name == lord_name }
+      raise Error, "Player #{lord_name} unknown" if player.nil?
+      raise Error, "Not your turn" unless player.lord_name == current_player
+      neighbour = @neighbours.detect { |n| n.name == neighbour_name }
+      raise Error, "Neighbour #{neighbour_name} unknown" if neighbour.nil?
+
+      player.place_peon_on(neighbour)
+
+      next_player
     end
 
     private
+
+    def create_neighbours
+      NEIGHBOURS_NAMES.map {|name| Neighbour.new(name, @players.length)}
+    end
+
+    def next_player
+      @current_player = players[next_player_index]
+    end
+
+    def next_player_index
+      index_of_current_player = players.index { |p| p.lord_name == current_player }
+
+      if index_of_current_player == players.length
+        0
+      else
+        ++index_of_current_player
+      end
+    end
 
     def prepare_players(players)
       remaining_lord_names = LORD_NAMES.dup
@@ -39,6 +70,7 @@ module Sbires
     end
 
     def place_peon_on(neighbour)
+      raise Error, "No more peons to place" if peons == 0
       neighbour.receive_peon_from(lord_name)
       @peons -= 1
     end
