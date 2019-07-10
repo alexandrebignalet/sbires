@@ -55,8 +55,16 @@ class Game
     @current_phase = PLAY_CARDS
   end
 
+  def end_turn
+    @current_player = players[next_player_index]
+  end
+
   def first_phase_over?
     players.all? { |p| p.all_pawns_placed? }
+  end
+
+  def neighbours_dominants
+    neighbours.map { |neighbour| [neighbour.dominant, neighbour]}
   end
 
   def find_player(lord_name)
@@ -67,9 +75,7 @@ class Game
     neighbours.detect { |n| n.name == neighbour_name }
   end
 
-  def end_turn
-    @current_player = players[next_player_index]
-  end
+
 
   private
 

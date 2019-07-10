@@ -91,14 +91,19 @@ RSpec.describe "Card play phase" do
       end
     end
 
-    # context "Crieur public card played" do
-    #   it "should receive a card of each neighbour where player is dominant" do
-    #     initial_card_number = @first_player.cards.length
-    #     @game.draw_card(@first_player.lord_name, CardType::CRIEUR_PUBLIC)
-    #
-    #     expect(@first_player.cards.length).to eq initial_card_number
-    #     expect(@first_player.cards.last.name).to eq CardType::DEMONSTRATION_MENESTREL
-    #   end
-    # end
+    context "Crieur public card played" do
+      it "should receive a card of each neighbour where player is dominant" do
+        initial_card_number = @first_player.cards.length
+        play = Play.new(@first_player.lord_name, CardType::CRIEUR_PUBLIC)
+        @game.draw_card(play)
+
+        # 2 dominations - 1 discarded card = base + 1
+        expect(@first_player.cards.length).to eq initial_card_number + 1
+        expect(@first_player.cards.last.name).to eq CardType::CRIEUR_PUBLIC
+      end
+    end
+
+    # make player play the card -> in order to resolve the card before the use case
+    # this way we have the neighbour name (implicitely)
   end
 end
