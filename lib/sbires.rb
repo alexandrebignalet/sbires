@@ -35,7 +35,7 @@ module Sbires
     private
 
     def create_neighbours
-      NEIGHBOURS_NAMES.map {|name| Neighbour.new(name, @players.length)}
+      NEIGHBOURS_NAMES.map {|name| Neighbour.new(name, players.length)}
     end
 
     def next_player
