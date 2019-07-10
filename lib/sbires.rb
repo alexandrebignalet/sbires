@@ -9,7 +9,7 @@ module Sbires
   MAX_PLAYERS_IN_GAME = 5
 
   class Game
-    attr_reader :players, :current_player, :neighbours
+    attr_reader :players, :current_player, :neighbours, :current_phase
 
     def initialize(players)
       raise Error, "Not enough player to start the game" if players.length < MIN_PLAYERS_IN_GAME
@@ -18,6 +18,7 @@ module Sbires
       @players = prepare_players(players)
       @current_player = @players.sample
       @neighbours = create_neighbours
+      @current_phase = 1
     end
 
     def place_pawn(lord_name, neighbour_name)
@@ -42,6 +43,7 @@ module Sbires
         dominant = player(neighbour.dominant)
         dominant.pick_card_from(neighbour)
       end
+      @current_phase = 2
     end
 
     def first_phase_over?

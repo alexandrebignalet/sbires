@@ -19,6 +19,10 @@ module Sbires
         @player_two = @players.last
       end
 
+      it "should be in phase 1" do
+        expect(@game.current_phase).to eq 1
+      end
+
       it "game should create players" do
         expect(@players.map(&:name)).to eq(player_names)
       end
@@ -211,6 +215,10 @@ module Sbires
 
         it "should know when each player has placed all of its pawns" do
           expect(@game.first_phase_over?).to be true
+        end
+
+        it "should be in phase 2" do
+          expect(@game.current_phase).to eq 2
         end
 
         it "should give one more card from a neighbour to player with domination its neighbour" do
