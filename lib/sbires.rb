@@ -9,33 +9,49 @@ module Sbires
   MAX_PLAYERS_IN_GAME = 5
 
   class Game
-    attr_reader :players, :current_player_name, :neighbours
+    attr_reader :players, :current_player, :neighbours
 
     def initialize(players)
       raise Error, "Not enough player to start the game" if players.length < MIN_PLAYERS_IN_GAME
       raise Error, "Too much players to start the game" if players.length > MAX_PLAYERS_IN_GAME
 
       @players = prepare_players(players)
-      @current_player_name = @players.sample.lord_name
+      @current_player = @players.sample
       @neighbours = create_neighbours
     end
 
     def place_pawn(lord_name, neighbour_name)
       player = player(lord_name)
       raise Error, "Player #{lord_name} unknown" if player.nil?
-      raise Error, "Not your turn" unless player.lord_name == current_player_name
-      neighbour = @neighbours.detect { |n| n.name == neighbour_name }
+      raise Error, "Not your turn" unless player.lord_name == current_player.lord_name
+      neighbour = neighbours.detect { |n| n.name == neighbour_name }
       raise Error, "Neighbour #{neighbour_name} unknown" if neighbour.nil?
 
       player.place_pawn_on(neighbour)
       player.pick_card_from(neighbour)
 
+      finish_first_phase if first_phase_over?
+
       next_player
+    end
+
+    def finish_first_phase
+      neighbours.each do |neighbour|
+        next unless neighbour.dominant
+
+        dominant = player(neighbour.dominant)
+        dominant.pick_card_from(neighbour)
+      end
+    end
+
+    def first_phase_over?
+      players.all? { |p| p.all_pawns_placed? }
     end
 
     def player(lord_name)
       players.detect { |p| p.lord_name == lord_name }
     end
+
     private
 
     def create_neighbours
@@ -43,12 +59,12 @@ module Sbires
     end
 
     def next_player
-      @current_player_name = players[next_player_index]
+      @current_player = players[next_player_index]
     end
 
     def next_player_index
-      index_of_current_player = players.index { |p| p.lord_name == current_player_name }
-      index_of_current_player == players.length ? 0 : ++index_of_current_player
+      index_of_current_player = players.index { |p| p.lord_name == current_player.lord_name }
+      index_of_current_player == players.length - 1 ? 0 : index_of_current_player + 1
     end
 
     def prepare_players(players)
@@ -87,15 +103,16 @@ module Sbires
       @cards.delete card
     end
 
-    private
-
     def all_pawns_placed?
       pawns.length == 0
     end
   end
+
   class Pawn
-    def initialize(belongs_to)
-      @belongs_to = belongs_to
+    attr_reader :lord_name
+
+    def initialize(lord_name)
+      @lord_name = lord_name
     end
   end
 
@@ -123,6 +140,16 @@ module Sbires
 
     def add_discarded(card)
       @discard << card
+    end
+
+    def dominant
+      pawns_by_lord = @pawns.reduce({}) do |acc, curr|
+        acc[curr.lord_name] = acc[curr.lord_name].nil? ? 1 : acc[curr.lord_name] + 1
+        acc
+      end
+      pawns_number = pawns_by_lord.values
+      max_pawns = pawns_number.max
+      pawns_number.count(max_pawns) == 1 ? pawns_by_lord.detect { |k, v| v == max_pawns }.first : nil
     end
 
     def full?

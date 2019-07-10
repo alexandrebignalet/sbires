@@ -1,3 +1,5 @@
+require 'pry'
+
 module Sbires
   RSpec.describe Sbires do
     let(:player_names) { %w(Jean Francois) }
@@ -22,8 +24,8 @@ module Sbires
       end
 
       it "game should elect the first player" do
-        expect(@game.current_player_name).not_to be nil
-        expect(@players.map(&:lord_name)).to include(@game.current_player_name)
+        expect(@game.current_player).not_to be nil
+        expect(@players.map(&:lord_name)).to include(@game.current_player.lord_name)
       end
 
       it "game should assign a lord name for each players" do
@@ -98,7 +100,7 @@ module Sbires
         player.place_pawn_on(neighbour)
         player.place_pawn_on(neighbour)
         player.place_pawn_on(neighbour)
-        
+
         expect(neighbour.full?).to be true
       end
 
@@ -156,22 +158,69 @@ module Sbires
         @player_one = @players.first
         @player_two = @players.last
 
-        @current_player_lord_name = @game.current_player_name
-        @game.place_pawn(@current_player_lord_name, NEIGHBOURS_NAMES.first)
+        @chateau = NEIGHBOURS_NAMES.first
+        @first_player = @game.current_player
+        @game.place_pawn(@first_player.lord_name, @chateau)
       end
 
       it "game should not allow a player to place multiple pawns consecutively" do
-        expect { @game.place_pawn(@current_player_lord_name, NEIGHBOURS_NAMES.first) }.to raise_error Error
+        expect { @game.place_pawn(@first_player.lord_name, NEIGHBOURS_NAMES.first) }.to raise_error Error
       end
 
       it "after pawn placement player should pick a card on its neighbour" do
-        current_player = @game.player(@current_player_lord_name)
-        expect(current_player.cards.length).to eq 1
-        expect(current_player.cards.first.neighbour_name).to eq NEIGHBOURS_NAMES.first
+        expect(@first_player.cards.length).to eq 1
+        expect(@first_player.cards.first.neighbour_name).to eq NEIGHBOURS_NAMES.first
 
         neighbour = @game.neighbours.detect { |n| n.name == NEIGHBOURS_NAMES.first }
         expect(neighbour.deck.length).to eq Neighbour::CARD_NUMBER_PER_NEIGHBOUR - 1
         expect(neighbour.discard.length).to eq 0
+      end
+
+      context "end of placement phase" do
+        before do
+          @second_player = @players.detect { |p| p.lord_name == @game.current_player.lord_name }
+          @first_player = @players.detect { |p| p.lord_name != @second_player.lord_name }
+
+          @eglise = NEIGHBOURS_NAMES.last
+          @taverne = NEIGHBOURS_NAMES.first(2).last
+          @salle_d_armes = NEIGHBOURS_NAMES.first(3).last
+
+          @game.place_pawn(@second_player.lord_name, @eglise)
+          @game.place_pawn(@first_player.lord_name, @chateau)
+
+          @game.place_pawn(@second_player.lord_name, @eglise)
+          @game.place_pawn(@first_player.lord_name, @chateau)
+
+          @game.place_pawn(@second_player.lord_name, @eglise)
+          @game.place_pawn(@first_player.lord_name, @chateau)
+
+          @game.place_pawn(@second_player.lord_name, @eglise)
+
+          @game.place_pawn(@first_player.lord_name, @taverne)
+          @game.place_pawn(@second_player.lord_name, @taverne)
+
+          @game.place_pawn(@first_player.lord_name, @taverne)
+          @game.place_pawn(@second_player.lord_name, @taverne)
+
+          @game.place_pawn(@first_player.lord_name, @salle_d_armes)
+          @game.place_pawn(@second_player.lord_name, @salle_d_armes)
+
+          @game.place_pawn(@first_player.lord_name, @salle_d_armes)
+          @game.place_pawn(@second_player.lord_name, @salle_d_armes)
+        end
+
+        it "should know when each player has placed all of its pawns" do
+          expect(@game.first_phase_over?).to be true
+        end
+
+        it "should give one more card from a neighbour to player with domination its neighbour" do
+          expect(@second_player.cards.length).to eq 9
+          eglise_cards = @second_player.cards.select { |c| c.neighbour_name == @eglise }
+          expect(eglise_cards.length).to eq 5
+          expect(@first_player.cards.length).to eq 9
+          chateau_cards = @first_player.cards.select { |c| c.neighbour_name == @chateau }
+          expect(chateau_cards.length).to eq 5
+        end
       end
     end
   end
