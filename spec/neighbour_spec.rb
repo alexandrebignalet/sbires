@@ -64,50 +64,51 @@ module Sbires
       expect(neighbour.full?).to be true
     end
 
-    it "should create a deck with 26 cards of the neighbour name" do
-      neighbour = Neighbour.new(Game::NEIGHBOURS_NAMES.sample, 3)
+    context "Card assignation" do
+      it "should create a deck with 26 cards of the neighbour name" do
+        neighbour = Neighbour.new(Game::NEIGHBOURS_NAMES.sample, 3)
 
-      expect(neighbour.deck).to all( have_attributes neighbour_name: neighbour.name )
-      expect(neighbour.deck.length).to eq Neighbour::CARD_NUMBER_PER_NEIGHBOUR
+        expect(neighbour.deck).to all( have_attributes neighbour_name: neighbour.name )
+        expect(neighbour.deck.length).to eq Neighbour::CARD_NUMBER_PER_NEIGHBOUR
+      end
+
+      it "should create an empty discard on init" do
+        neighbour = Neighbour.new(Game::NEIGHBOURS_NAMES.sample, 3)
+
+        expect(neighbour.discard.length).to eq 0
+      end
+
+      it "should allow player to shift a card of the deck" do
+        player = Player.new("Jean", Game::LORD_NAMES.first)
+        neighbour = Neighbour.new(Game::NEIGHBOURS_NAMES.sample, 3)
+
+        player.pick_top_card_of_deck(neighbour)
+
+        expect(player.cards.length).to eq 1
+        expect(player.cards.first).to have_attributes neighbour_name: neighbour.name
+        expect(neighbour.deck.length).to eq Neighbour::CARD_NUMBER_PER_NEIGHBOUR - 1
+      end
+
+      it "should allow player to discard a card" do
+        player = Player.new("Jean", Game::LORD_NAMES.first)
+        neighbour = Neighbour.new(Game::NEIGHBOURS_NAMES.sample, 3)
+
+        player.pick_top_card_of_deck(neighbour)
+        player.discard_in(player.cards.first.name, neighbour)
+
+        expect(player.cards.length).to eq 0
+        expect(neighbour.deck.length).to eq Neighbour::CARD_NUMBER_PER_NEIGHBOUR - 1
+        expect(neighbour.discard.length).to eq 1
+      end
+
+      it "should raise if discarded card does not belong to the player" do
+        player = Player.new("Jean", Game::LORD_NAMES.first)
+        player2 = Player.new("Mich", Game::LORD_NAMES.first(2).last)
+        neighbour = Neighbour.new(Game::NEIGHBOURS_NAMES.sample, 3)
+
+        player2.pick_top_card_of_deck(neighbour)
+        expect { player.discard_in(player2.cards.first, neighbour) }.to raise_error Sbires::Error
+      end
     end
-
-    it "should create an empty discard on init" do
-      neighbour = Neighbour.new(Game::NEIGHBOURS_NAMES.sample, 3)
-
-      expect(neighbour.discard.length).to eq 0
-    end
-
-    it "should allow player to shift a card of the deck" do
-      player = Player.new("Jean", Game::LORD_NAMES.first)
-      neighbour = Neighbour.new(Game::NEIGHBOURS_NAMES.sample, 3)
-
-      player.pick_card_from(neighbour)
-
-      expect(player.cards.length).to eq 1
-      expect(player.cards.first).to have_attributes neighbour_name: neighbour.name
-      expect(neighbour.deck.length).to eq Neighbour::CARD_NUMBER_PER_NEIGHBOUR - 1
-    end
-
-    it "should allow player to discard a card" do
-      player = Player.new("Jean", Game::LORD_NAMES.first)
-      neighbour = Neighbour.new(Game::NEIGHBOURS_NAMES.sample, 3)
-
-      player.pick_card_from(neighbour)
-      player.discard_in(player.cards.first, neighbour)
-
-      expect(player.cards.length).to eq 0
-      expect(neighbour.deck.length).to eq Neighbour::CARD_NUMBER_PER_NEIGHBOUR - 1
-      expect(neighbour.discard.length).to eq 1
-    end
-
-    it "should raise if discarded card does not belong to the player" do
-      player = Player.new("Jean", Game::LORD_NAMES.first)
-      player2 = Player.new("Mich", Game::LORD_NAMES.first(2).last)
-      neighbour = Neighbour.new(Game::NEIGHBOURS_NAMES.sample, 3)
-
-      player2.pick_card_from(neighbour)
-      expect { player.discard_in(player2.cards.first, neighbour) }.to raise_error Sbires::Error
-    end
-
   end
 end

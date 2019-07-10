@@ -7,13 +7,20 @@ class Neighbour
     @name = name
     @pawns = []
     @players_in_game = players_in_game
-    @deck = (0...CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(@name) }
+    @deck = DeckFactory.new.create_deck_for @name
     @discard = []
   end
 
   def receive_pawn_from(pawn)
     raise Sbires::Error, "Neighbour is full" if full?
     @pawns << pawn
+  end
+
+  def give_from_discard(card_name)
+    card = @discard.detect { |card| card.name == card_name }
+    raise Sbires::Error, "Card not in discard" if card.nil?
+
+    @discard.delete(card)
   end
 
   def shift_deck

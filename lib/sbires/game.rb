@@ -1,8 +1,16 @@
+require 'sbires/neighbour_type'
+
 class Game
   LORD_NAMES = ["De Sinople", "D'Azure", "De Gueules", "D'Or", "D'Argent"]
-  NEIGHBOURS_NAMES = ["Le Château", "La Taverne", "La Salle d'Armes", "La Grand Place", "L'Eglise"]
+  NEIGHBOURS_NAMES = [NeighbourType::CHATEAU,
+                      NeighbourType::TAVERNE,
+                      NeighbourType::SALLE_D_ARMES,
+                      NeighbourType::GRAND_PLACE,
+                      NeighbourType::EGLISE]
   MIN_PLAYERS_IN_GAME = 2
   MAX_PLAYERS_IN_GAME = 5
+  PLACE_PAWNS = 1
+  PLAY_CARDS = 2
 
   attr_reader :players, :current_player, :neighbours, :current_phase
 
@@ -10,53 +18,63 @@ class Game
     raise Sbires::Error, "Not enough player to start the game" if players.length < MIN_PLAYERS_IN_GAME
     raise Sbires::Error, "Too much players to start the game" if players.length > MAX_PLAYERS_IN_GAME
 
+    @play_mediator = CardPlayMediator.new
     @players = prepare_players(players)
     @current_player = @players.sample
     @neighbours = create_neighbours
-    @current_phase = 1
+    @current_phase = PLACE_PAWNS
   end
 
   def place_pawn(lord_name, neighbour_name)
-    player = player(lord_name)
+    player = find_player(lord_name)
     raise Sbires::Error, "Player #{lord_name} unknown" if player.nil?
     raise Sbires::Error, "Not your turn" unless player.lord_name == current_player.lord_name
     neighbour = neighbours.detect { |n| n.name == neighbour_name }
     raise Sbires::Error, "Neighbour #{neighbour_name} unknown" if neighbour.nil?
 
     player.place_pawn_on(neighbour)
-    player.pick_card_from(neighbour)
+    player.pick_top_card_of_deck(neighbour)
 
     finish_first_phase if first_phase_over?
 
-    next_player
+    end_turn
+  end
+
+  def draw_card(play)
+    raise Sbires::Error, "Not in phase Play Cards" unless current_phase == PLAY_CARDS
+    @play_mediator.notify(self, play)
   end
 
   def finish_first_phase
     neighbours.each do |neighbour|
       next unless neighbour.dominant
 
-      dominant = player(neighbour.dominant)
-      dominant.pick_card_from(neighbour)
+      dominant = find_player(neighbour.dominant)
+      dominant.pick_top_card_of_deck(neighbour)
     end
-    @current_phase = 2
+    @current_phase = PLAY_CARDS
   end
 
   def first_phase_over?
     players.all? { |p| p.all_pawns_placed? }
   end
 
-  def player(lord_name)
+  def find_player(lord_name)
     players.detect { |p| p.lord_name == lord_name }
+  end
+
+  def find_neighbour(neighbour_name)
+    neighbours.detect { |n| n.name == neighbour_name }
+  end
+
+  def end_turn
+    @current_player = players[next_player_index]
   end
 
   private
 
   def create_neighbours
     NEIGHBOURS_NAMES.map {|name| Neighbour.new(name, players.length)}
-  end
-
-  def next_player
-    @current_player = players[next_player_index]
   end
 
   def next_player_index
