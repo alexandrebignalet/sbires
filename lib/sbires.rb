@@ -20,14 +20,14 @@ module Sbires
       @neighbours = create_neighbours
     end
 
-    def place_peon(lord_name, neighbour_name)
+    def place_pawn(lord_name, neighbour_name)
       player = players.detect { |p| p.lord_name == lord_name }
       raise Error, "Player #{lord_name} unknown" if player.nil?
       raise Error, "Not your turn" unless player.lord_name == current_player
       neighbour = @neighbours.detect { |n| n.name == neighbour_name }
       raise Error, "Neighbour #{neighbour_name} unknown" if neighbour.nil?
 
-      player.place_peon_on(neighbour)
+      player.place_pawn_on(neighbour)
 
       next_player
     end
@@ -44,12 +44,7 @@ module Sbires
 
     def next_player_index
       index_of_current_player = players.index { |p| p.lord_name == current_player }
-
-      if index_of_current_player == players.length
-        0
-      else
-        ++index_of_current_player
-      end
+      index_of_current_player == players.length ? 0 : ++index_of_current_player
     end
 
     def prepare_players(players)
@@ -59,20 +54,21 @@ module Sbires
   end
 
   class Player
-    PEON_PER_PLAYER = 8
+    PAWN_PER_PLAYER = 8
+    INITIAL_POINT_NUMBER = 5
 
-    attr_reader :name, :lord_name, :peons
+    attr_reader :name, :lord_name, :pawns, :points
 
     def initialize(name, lord_name)
       @name = name
       @lord_name = lord_name
-      @peons = PEON_PER_PLAYER
+      @points = INITIAL_POINT_NUMBER
+      @pawns = (0...PAWN_PER_PLAYER).map { Pawn.new(@lord_name) }
     end
 
-    def place_peon_on(neighbour)
-      raise Error, "No more peons to place" if peons == 0
-      neighbour.receive_peon_from(lord_name)
-      @peons -= 1
+    def place_pawn_on(neighbour)
+      raise Error, "No more pawns to place" if pawns.length == 0
+      neighbour.receive_pawn_from(pawns.shift)
     end
   end
 
@@ -81,35 +77,34 @@ module Sbires
 
     def initialize(name, players_in_game)
       @name = name
-      @peons = []
+      @pawns = []
       @players_in_game = players_in_game
     end
 
-    def receive_peon_from(lord_name)
+    def receive_pawn_from(pawn)
       raise Error, "Neighbour is full" if full?
-
-      @peons << Peon.new(lord_name)
+      @pawns << pawn
     end
 
     def full?
-      @peons.length >= current_peon_limit
+      @pawns.length >= current_pawn_limit
     end
 
     private
 
-    def current_peon_limit
-      peon_limits = {
+    def current_pawn_limit
+      pawn_limits = {
           MIN_PLAYERS_IN_GAME => 4,
           3 => 5,
           4 => 7,
           MAX_PLAYERS_IN_GAME => 8
       }
 
-      peon_limits[@players_in_game]
+      pawn_limits[@players_in_game]
     end
   end
 
-  class Peon
+  class Pawn
     def initialize(belongs_to)
       @belongs_to = belongs_to
     end
