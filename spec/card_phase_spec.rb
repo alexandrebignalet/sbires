@@ -89,7 +89,7 @@ RSpec.describe "Card play phase" do
 
         expect(@first_player.cards.length).to eq initial_player_card_number + 1
         expect(targeted_neighbour.discard.length).to eq initial_discard_size - 1
-        expect(@game.current_player).not_to be @first_player
+        expect(@game.current_player).not_to eq @first_player
       end
     end
 
@@ -103,5 +103,57 @@ RSpec.describe "Card play phase" do
         expect(@first_player.cards.last.name).to eq CardType::CRIEUR_PUBLIC
       end
     end
+
+    context "agarre générale card played: " do
+      context "every player except current must send a spare card in his discard" do
+        before do
+          # put a card in spare of second player
+          @discardable_card_name = CardType::DEMONSTRATION_MENESTREL
+          @discardable_card = @second_player.find_card @discardable_card_name
+          @second_player.spare_card(@discardable_card)
+
+          @game.draw_card(@first_player.lord_name, CardType::BAGARRE_GENERALE)
+        end
+
+        it "should set game in bagarre générale mode" do
+          expect(@game.state).to be_instance_of BagarreGeneraleState
+        end
+
+        it "should not have ended current player turn" do
+          expect(@first_player).to eq @game.current_player
+        end
+
+        it "should allow other player to discard one of their spare cards" do
+          initial_spare_size = @second_player.spare.length
+          @game.discard_spare_card(@second_player.lord_name, @discardable_card_name)
+
+          expect(@second_player.spare.length).to eq initial_spare_size - 1
+        end
+
+        it "should raise if the given card is not in spare" do
+          expect { @game.discard_spare_card(@second_player.lord_name, CardType::ARMURE_COMPLETE) }.to raise_error Sbires::Error
+        end
+
+        # when player has no spare card
+        it "should end current player turn when every other have discarded a spare card" do
+          @game.discard_spare_card(@second_player.lord_name, @discardable_card_name)
+
+          expect(@game.state).to be_instance_of PlayCards
+          expect(@game.current_player).not_to eq @first_player
+        end
+      end
+
+      context "when nobody is discardable" do
+        before do
+          @game.draw_card(@first_player.lord_name, CardType::BAGARRE_GENERALE)
+        end
+
+        it "should end current player turn and regret his miss play" do
+          expect(@game.state).to be_instance_of PlayCards
+          expect(@game.current_player).not_to eq @first_player
+        end
+      end
+    end
+
   end
 end

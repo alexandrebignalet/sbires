@@ -32,6 +32,11 @@ class Player
     @cards.delete card
   end
 
+  def discard_spare_in(card, neighbour)
+    neighbour.add_discarded(card)
+    @spare.delete card
+  end
+
   def spare_card(card)
     @cards.delete card
     @spare << card
@@ -42,7 +47,15 @@ class Player
   end
 
   def find_card(card_name)
-    cards.detect { |c| c.name == card_name }
+    card = cards.detect { |c| c.name == card_name }
+    raise Sbires::Error, "You don't own a card #{card_name}" if card.nil?
+    card
+  end
+
+  def find_card_in_spare(card_name)
+    card = spare.detect { |c| c.name == card_name }
+    raise Sbires::Error, "You don't have a card #{card_name} in spare" if card.nil?
+    card
   end
 
   def == player

@@ -63,7 +63,7 @@ RSpec.describe Sbires do
     end
 
     it "should be in phase 2" do
-      expect(@game.current_phase).to eq 2
+      expect(@game.state).to be_instance_of PlayCards
     end
 
     it "should give one more card from a neighbour to player with domination its neighbour" do

@@ -3,9 +3,12 @@ require 'sbires/version'
 module Sbires
   class Error < StandardError; end
 
-  require 'sbires/game'
-  require 'sbires/card'
-  require 'sbires/card_type'
+  require 'sbires/game/game'
+  require 'sbires/game/states/play_cards'
+  require 'sbires/game/states/pawn_placement'
+  require 'sbires/game/states/bagarre_generale_state'
+  require 'sbires/cards/card'
+  require 'sbires/cards/card_type'
   require 'sbires/neighbour'
   require 'sbires/neighbour_type'
   require 'sbires/player'

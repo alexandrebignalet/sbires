@@ -16,7 +16,7 @@ RSpec.describe Sbires do
     end
 
     it "should be in phase 1" do
-      expect(@game.current_phase).to eq 1
+      expect(@game.state).to be_instance_of PawnPlacement
     end
 
     it "game should create players" do

@@ -5,7 +5,11 @@ module Middlewares
 
       next_middleware.call
 
-      play.game.end_turn
+      play.game.end_turn unless prevent_end_turn?(play.card)
+    end
+
+    def prevent_end_turn?(card)
+      [CardType::BAGARRE_GENERALE].include? card.name
     end
   end
 end

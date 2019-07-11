@@ -32,10 +32,10 @@ class DeckFactory
   end
 
   def create_salle_d_armes_cards
-    (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::CRIEUR_PUBLIC) }
+    (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::ARMURE_COMPLETE) }
   end
 
   def create_taverne_cards
-    (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::TAVERNE, CardType::CRIEUR_PUBLIC) }
+    (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::TAVERNE, CardType::BAGARRE_GENERALE) }
   end
 end

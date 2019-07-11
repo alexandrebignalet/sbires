@@ -6,6 +6,7 @@ module Cards
     require 'sbires/cards/play_handlers/demonstration'
     require 'sbires/cards/play_handlers/fossoyeur'
     require 'sbires/cards/play_handlers/crieur_public'
+    require 'sbires/cards/play_handlers/bagarre_generale'
   end
 
   module Middlewares

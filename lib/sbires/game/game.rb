@@ -9,10 +9,8 @@ class Game
                       NeighbourType::EGLISE]
   MIN_PLAYERS_IN_GAME = 2
   MAX_PLAYERS_IN_GAME = 5
-  PLACE_PAWNS = 1
-  PLAY_CARDS = 2
 
-  attr_reader :players, :current_player, :neighbours, :current_phase
+  attr_reader :players, :current_player, :neighbours, :state, :play_mediator
 
   def initialize(players)
     raise Sbires::Error, "Not enough player to start the game" if players.length < MIN_PLAYERS_IN_GAME
@@ -22,50 +20,41 @@ class Game
     @players = prepare_players(players)
     @current_player = @players.sample
     @neighbours = create_neighbours DeckFactory.new
-    @current_phase = PLACE_PAWNS
+
+    transition_to PawnPlacement
   end
 
+  def transition_to(state_class)
+    @state = state_class.new self
+  end
+
+  ############# PAWN PLACEMENT ###########
   def place_pawn(lord_name, neighbour_name)
-    player = find_player(lord_name)
-    raise Sbires::Error, "Player #{lord_name} unknown" if player.nil?
-    raise Sbires::Error, "Not your turn" unless player.lord_name == current_player.lord_name
-    neighbour = neighbours.detect { |n| n.name == neighbour_name }
-    raise Sbires::Error, "Neighbour #{neighbour_name} unknown" if neighbour.nil?
-
-    player.place_pawn_on(neighbour)
-    player.pick_top_card_of_deck(neighbour)
-
-    finish_first_phase if first_phase_over?
-
-    end_turn
-  end
-
-  def draw_card(lord_name, card_name, play_params = {})
-    raise Sbires::Error, "Not in phase Play Cards" unless current_phase == PLAY_CARDS
-    player = find_player lord_name
-    raise Sbires::Error, "Unknown player #{lord_name}" if player.nil?
-    card = player.find_card card_name
-    raise Sbires::Error, "You don't own a card #{card_name}" if card.nil?
-
-    @play_mediator.notify Play.new(self, player, card, play_params)
+    @state.place_pawn(lord_name, neighbour_name)
   end
 
   def finish_first_phase
-    neighbours.each do |neighbour|
-      next unless neighbour.dominant
-
-      dominant = find_player(neighbour.dominant)
-      dominant.pick_top_card_of_deck(neighbour)
-    end
-    @current_phase = PLAY_CARDS
-  end
-
-  def end_turn
-    @current_player = players[next_player_index]
+    @state.finish_first_phase
   end
 
   def first_phase_over?
     players.all? { |p| p.all_pawns_placed? }
+  end
+  ###### PAWN PLACEMENT ########
+
+  ###### PLAY CARDS ##########
+  def draw_card(lord_name, card_name, play_params = {})
+    @state.draw_card(lord_name, card_name, play_params)
+  end
+
+  def discard_spare_card(lord_name, card_name)
+    @state.discard_spare_card(lord_name, card_name)
+  end
+
+  ###### PLAY CARDS ##########
+
+  def end_turn
+    @current_player = players[next_player_index]
   end
 
   def neighbours_dominants
@@ -73,14 +62,16 @@ class Game
   end
 
   def find_player(lord_name)
-    players.detect { |p| p.lord_name == lord_name }
+    player = players.detect { |p| p.lord_name == lord_name }
+    raise Sbires::Error, "Unknown player #{lord_name}" if player.nil?
+    player
   end
 
   def find_neighbour(neighbour_name)
-    neighbours.detect { |n| n.name == neighbour_name }
+    neighbour = neighbours.detect { |n| n.name == neighbour_name }
+    raise Sbires::Error, "Unknown neighbour" if neighbour.nil?
+    neighbour
   end
-
-
 
   private
 
