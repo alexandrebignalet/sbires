@@ -27,10 +27,7 @@ class Player
     @cards << card
   end
 
-  def discard_in(card_name, neighbour)
-    card = find_card card_name
-    raise Sbires::Error, "Not your card" unless cards.include? card
-
+  def discard_in(card, neighbour)
     neighbour.add_discarded(card)
     @cards.delete card
   end

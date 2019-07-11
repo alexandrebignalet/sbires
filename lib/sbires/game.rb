@@ -40,14 +40,15 @@ class Game
     end_turn
   end
 
-  def draw_card(play)
+  def draw_card(lord_name, card_name, play_params = {})
     raise Sbires::Error, "Not in phase Play Cards" unless current_phase == PLAY_CARDS
-    player = find_player play.submitter_lord_name
-    raise Sbires::Error, "Unknown player #{play.submitter_lord_name}" if player.nil?
-    card = player.find_card play.card_name
-    raise Sbires::Error, "You don't own a card #{play.card_name}" if card.nil?
+    player = find_player lord_name
+    raise Sbires::Error, "Unknown player #{lord_name}" if player.nil?
+    card = player.find_card card_name
+    raise Sbires::Error, "You don't own a card #{card_name}" if card.nil?
 
-    @play_mediator.notify(self, card, player, play)
+    play = Play.new(self, player, card, play_params)
+    @play_mediator.notify(play)
   end
 
   def finish_first_phase

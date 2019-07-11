@@ -10,8 +10,7 @@ RSpec.describe "Card play phase" do
   end
 
   it "should raise if player try to put a card in phase 1" do
-    play = Play.new(@current_player.lord_name, CardType::DEMONSTRATION_MENESTREL)
-    expect { @game.draw_card(play) }.to raise_error Sbires::Error
+    expect { @game.draw_card(@current_player.lord_name, CardType::DEMONSTRATION_MENESTREL) }.to raise_error Sbires::Error
   end
 
   context "when the game is in phase Play Cards" do
@@ -45,22 +44,19 @@ RSpec.describe "Card play phase" do
     end
 
     it "should raise if player does not own the card" do
-      play = Play.new(@first_player.lord_name, CardType::DEMONSTRATION_AMUSEUR)
-      expect { @game.draw_card(play) }.to raise_error Sbires::Error
+      expect { @game.draw_card(@first_player.lord_name, CardType::DEMONSTRATION_AMUSEUR) }.to raise_error Sbires::Error
     end
 
     it "should have lost a card in hand" do
       initial_card_number = @first_player.cards.length
-      play = Play.new(@first_player.lord_name, CardType::DEMONSTRATION_MENESTREL)
-      @game.draw_card(play)
+      @game.draw_card(@first_player.lord_name, CardType::DEMONSTRATION_MENESTREL)
 
       expect(@first_player.cards.length).to eq initial_card_number - 1
     end
 
     context "Démonstration card played" do
       it "should put Démonstration cards in player's spare" do
-        play = Play.new(@first_player.lord_name, CardType::DEMONSTRATION_MENESTREL)
-        @game.draw_card(play)
+        @game.draw_card(@first_player.lord_name, CardType::DEMONSTRATION_MENESTREL)
 
         expect(@first_player.spare.first.name).to eq CardType::DEMONSTRATION_MENESTREL
         expect(@game.current_player).not_to be @first_player
@@ -69,21 +65,20 @@ RSpec.describe "Card play phase" do
 
     context "Fossoyeur card played" do
       it "should raise if card to pick is not in discard" do
-        play = PlayFossoyeur.new(@first_player.lord_name, NeighbourType::CHATEAU, CardType::FOSSOYEUR)
-        expect { @game.draw_card(play) }.to raise_error Sbires::Error
+        expect { @game.draw_card(@first_player.lord_name, CardType::FOSSOYEUR, { neighbour_discard: NeighbourType::CHATEAU, chosen_card_name: CardType::FOSSOYEUR })  }.to raise_error Sbires::Error
       end
 
       it "should pick the asked card in the asked discard" do
         card_name = CardType::DEMONSTRATION_MENESTREL
         neighbour_name = NeighbourType::CHATEAU
+        targeted_card = @first_player.find_card card_name
         targeted_neighbour = @game.find_neighbour neighbour_name
-        @first_player.discard_in(card_name, targeted_neighbour)
+        @first_player.discard_in(targeted_card, targeted_neighbour)
 
         initial_discard_size = targeted_neighbour.discard.length
         initial_player_card_number = @first_player.cards.length
 
-        play = PlayFossoyeur.new(@first_player.lord_name, neighbour_name, card_name)
-        @game.draw_card(play)
+        @game.draw_card(@first_player.lord_name, CardType::FOSSOYEUR, { neighbour_discard: neighbour_name, chosen_card_name: card_name })
 
         expect(@first_player.cards.length).to eq initial_player_card_number + 1
         expect(targeted_neighbour.discard.length).to eq initial_discard_size - 1
@@ -94,8 +89,7 @@ RSpec.describe "Card play phase" do
     context "Crieur public card played" do
       it "should receive a card of each neighbour where player is dominant" do
         initial_card_number = @first_player.cards.length
-        play = Play.new(@first_player.lord_name, CardType::CRIEUR_PUBLIC)
-        @game.draw_card(play)
+        @game.draw_card(@first_player.lord_name, CardType::CRIEUR_PUBLIC)
 
         # 2 dominations - 1 discarded card = base + 1
         expect(@first_player.cards.length).to eq initial_card_number + 1
@@ -104,9 +98,6 @@ RSpec.describe "Card play phase" do
     end
 
     # create base play handler for end turn card or middleware
-    #
-    # make player play the card -> in order to resolve the card before the use case
-    # this way we have the neighbour name (implicitely)
     #
     # create double for deck factory in order to test against a specific deck
     # and to introduce real card repartition

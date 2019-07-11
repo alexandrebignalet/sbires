@@ -1,8 +1,10 @@
 class Play
-  attr_reader :submitter_lord_name, :card_name
+  attr_reader :game, :submitter, :card, :params
   
-  def initialize(submitter_lord_name, card_name)
-    @submitter_lord_name = submitter_lord_name
-    @card_name = card_name
+  def initialize(game, submitter, card, params)
+    @game = game
+    @submitter = submitter
+    @card = card
+    @params = params
   end
 end

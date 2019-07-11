@@ -94,20 +94,11 @@ module Sbires
         neighbour = Neighbour.new(Game::NEIGHBOURS_NAMES.sample, 3)
 
         player.pick_top_card_of_deck(neighbour)
-        player.discard_in(player.cards.first.name, neighbour)
+        player.discard_in(player.cards.first, neighbour)
 
         expect(player.cards.length).to eq 0
         expect(neighbour.deck.length).to eq Neighbour::CARD_NUMBER_PER_NEIGHBOUR - 1
         expect(neighbour.discard.length).to eq 1
-      end
-
-      it "should raise if discarded card does not belong to the player" do
-        player = Player.new("Jean", Game::LORD_NAMES.first)
-        player2 = Player.new("Mich", Game::LORD_NAMES.first(2).last)
-        neighbour = Neighbour.new(Game::NEIGHBOURS_NAMES.sample, 3)
-
-        player2.pick_top_card_of_deck(neighbour)
-        expect { player.discard_in(player2.cards.first, neighbour) }.to raise_error Sbires::Error
       end
     end
   end

@@ -1,16 +1,16 @@
 module PlayHandlers
   class Demonstration
-    def run(game, card, player, play)
-      current_player = game.current_player
-      raise Sbires::Error, "Not your turn" unless player == current_player
+    def run(play)
+      current_player = play.game.current_player
+      raise Sbires::Error, "Not your turn" unless play.submitter == current_player
 
-      current_player.spare_card(card)
+      current_player.spare_card(play.card)
 
-      game.end_turn
+      play.game.end_turn
     end
 
-    def listen_to(card_name)
-      [CardType::DEMONSTRATION_MENESTREL].include? card_name
+    def listen_to(card)
+      [CardType::DEMONSTRATION_MENESTREL].include? card.name
     end
   end
 end
