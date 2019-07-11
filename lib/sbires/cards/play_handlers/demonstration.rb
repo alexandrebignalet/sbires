@@ -1,9 +1,10 @@
 module PlayHandlers
   class Demonstration
-    def run(game, play)
+    def run(game, card, player, play)
       current_player = game.current_player
-      raise Sbires::Error, "Not your turn" if play.submitter_lord_name != current_player.lord_name
-      current_player.spare_card(play.card_name)
+      raise Sbires::Error, "Not your turn" unless player == current_player
+
+      current_player.spare_card(card)
 
       game.end_turn
     end

@@ -1,9 +1,8 @@
 module PlayHandlers
   class Fossoyeur
-    def run(game, play)
+    def run(game, card, player, play)
       current_player = game.current_player
-      raise Sbires::Error, "Not your turn" if play.submitter_lord_name != current_player.lord_name
-      raise Sbires::Error, "You must own the card" if current_player.find_card(play.card_name).nil?
+      raise Sbires::Error, "Not your turn" unless player == current_player
 
       neighbour = game.find_neighbour(play.neighbour_discard)
       raise Sbires::Error, "Unknown neighbour" if neighbour.nil?

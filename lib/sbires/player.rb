@@ -35,10 +35,7 @@ class Player
     @cards.delete card
   end
 
-  def spare_card(card_name)
-    card = find_card(card_name)
-    raise Sbires::Error, "You don't own this card" if card.nil?
-
+  def spare_card(card)
     @cards.delete card
     @spare << card
   end
@@ -49,5 +46,9 @@ class Player
 
   def find_card(card_name)
     cards.detect { |c| c.name == card_name }
+  end
+
+  def == player
+    lord_name == player.lord_name
   end
 end

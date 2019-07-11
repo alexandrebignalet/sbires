@@ -42,7 +42,12 @@ class Game
 
   def draw_card(play)
     raise Sbires::Error, "Not in phase Play Cards" unless current_phase == PLAY_CARDS
-    @play_mediator.notify(self, play)
+    player = find_player play.submitter_lord_name
+    raise Sbires::Error, "Unknown player #{play.submitter_lord_name}" if player.nil?
+    card = player.find_card play.card_name
+    raise Sbires::Error, "You don't own a card #{play.card_name}" if card.nil?
+
+    @play_mediator.notify(self, card, player, play)
   end
 
   def finish_first_phase

@@ -103,7 +103,12 @@ RSpec.describe "Card play phase" do
       end
     end
 
+    # create base play handler for end turn card or middleware
+    #
     # make player play the card -> in order to resolve the card before the use case
     # this way we have the neighbour name (implicitely)
+    #
+    # create double for deck factory in order to test against a specific deck
+    # and to introduce real card repartition
   end
 end

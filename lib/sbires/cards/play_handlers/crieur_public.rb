@@ -1,10 +1,10 @@
 module PlayHandlers
   class CrieurPublic
-    def run(game, play)
+    def run(game, card, player, play)
       current_player = game.current_player
-      raise Sbires::Error, "Not your turn" if play.submitter_lord_name != current_player.lord_name
+      raise Sbires::Error, "Not your turn" unless player == current_player
 
-      grand_place = game.find_neighbour NeighbourType::GRAND_PLACE
+      grand_place = game.find_neighbour card.neighbour_name
       current_player.discard_in(play.card_name, grand_place)
 
       game.neighbours_dominants.each do |neighbour_dominant|
