@@ -1,9 +1,8 @@
-require 'pry-byebug'
-require_relative './mocks/deck_factory_mock'
-
 RSpec.describe "Card play phase" do
 
   before do
+    allow_any_instance_of(DeckFactory).to receive(:deck_by_neighbour).and_return(DeckFactoryMock.unique_card_neighbour)
+
     player_names = ["Alex", "Yoan"]
     @game = Game.new(player_names)
     @current_player = @game.current_player
@@ -16,8 +15,6 @@ RSpec.describe "Card play phase" do
 
   context "when the game is in phase Play Cards" do
     before do
-      allow_any_instance_of(DeckFactory).to receive(:create_deck_for).and_return(DeckFactoryMock.unique_card_neighbour)
-
       @first_player = @players.detect { |p| p.lord_name == @current_player.lord_name }
       @second_player = @players.detect { |p| p.lord_name != @first_player.lord_name }
 
