@@ -7,6 +7,7 @@ module Sbires
   require 'sbires/game/states/play_cards'
   require 'sbires/game/states/pawn_placement'
   require 'sbires/game/states/bagarre_generale_state'
+  require 'sbires/game/states/duel'
   require 'sbires/cards/card'
   require 'sbires/cards/card_type'
   require 'sbires/neighbour'

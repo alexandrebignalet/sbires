@@ -104,7 +104,7 @@ RSpec.describe "Card play phase" do
       end
     end
 
-    context "agarre générale card played: " do
+    context "Bagarre générale card played: " do
       context "every player except current must send a spare card in his discard" do
         before do
           # put a card in spare of second player
@@ -155,5 +155,10 @@ RSpec.describe "Card play phase" do
       end
     end
 
+    context "armure complete card played" do
+      it "should raise if we are not in duel" do
+        expect { @game.draw_card(@first_player.lord_name, CardType::ARMURE_COMPLETE) }.to raise_error Sbires::Error
+      end
+    end
   end
 end

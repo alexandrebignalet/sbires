@@ -40,7 +40,7 @@ class CardPlayMediator
 
     def intercept(play, next_middleware)
       handler = @handlers.detect { |h| h.listen_to(play.card) }
-      raise Sbires::Error, "Play associated with this card is not handle yet" if handler.nil?
+      raise StandardError, "Play associated with this card is not handle yet" if handler.nil?
 
       puts "#{handler.class.name} handled #{play}"
       handler.run(play)
