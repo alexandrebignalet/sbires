@@ -1,6 +1,10 @@
 class DeckFactory
+  def initialize
+    @deck_by_neighbour = deck_by_neighbour
+  end
+
   def create_deck_for(neighbour_name)
-    deck_by_neighbour[neighbour_name]
+    @deck_by_neighbour[neighbour_name]
   end
 
   private
@@ -28,10 +32,10 @@ class DeckFactory
   end
 
   def create_salle_d_armes_cards
-    (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::GRAND_PLACE, CardType::CRIEUR_PUBLIC) }
+    (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::CRIEUR_PUBLIC) }
   end
 
   def create_taverne_cards
-    (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::GRAND_PLACE, CardType::CRIEUR_PUBLIC) }
+    (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::TAVERNE, CardType::CRIEUR_PUBLIC) }
   end
 end

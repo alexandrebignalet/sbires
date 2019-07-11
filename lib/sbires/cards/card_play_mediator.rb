@@ -2,6 +2,7 @@ class CardPlayMediator
 
   def initialize
     middlewares = Middlewares.constants.map { |h| Middlewares.const_get(h).send(:new) }
+
     @middleware_chain = create_chain(middlewares)
   end
 
@@ -41,6 +42,7 @@ class CardPlayMediator
       handler = @handlers.detect { |h| h.listen_to(play.card) }
       raise Sbires::Error, "Play associated with this card is not handle yet" if handler.nil?
 
+      puts "#{handler.class.name} handled #{play}"
       handler.run(play)
     end
   end

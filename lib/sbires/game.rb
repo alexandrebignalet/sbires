@@ -21,7 +21,7 @@ class Game
     @play_mediator = CardPlayMediator.new
     @players = prepare_players(players)
     @current_player = @players.sample
-    @neighbours = create_neighbours
+    @neighbours = create_neighbours DeckFactory.new
     @current_phase = PLACE_PAWNS
   end
 
@@ -84,8 +84,8 @@ class Game
 
   private
 
-  def create_neighbours
-    NEIGHBOURS_NAMES.map {|name| Neighbour.new(name, players.length)}
+  def create_neighbours(deck_factory)
+    NEIGHBOURS_NAMES.map {|name| Neighbour.new(name, players.length, deck_factory)}
   end
 
   def next_player_index
