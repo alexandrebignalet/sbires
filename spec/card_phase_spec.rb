@@ -1,4 +1,5 @@
 require 'pry-byebug'
+require_relative './mocks/deck_factory_mock'
 
 RSpec.describe "Card play phase" do
 
@@ -15,6 +16,8 @@ RSpec.describe "Card play phase" do
 
   context "when the game is in phase Play Cards" do
     before do
+      allow_any_instance_of(DeckFactory).to receive(:create_deck_for).and_return(DeckFactoryMock.unique_card_neighbour)
+
       @first_player = @players.detect { |p| p.lord_name == @current_player.lord_name }
       @second_player = @players.detect { |p| p.lord_name != @first_player.lord_name }
 
@@ -96,10 +99,5 @@ RSpec.describe "Card play phase" do
         expect(@first_player.cards.last.name).to eq CardType::CRIEUR_PUBLIC
       end
     end
-
-    # create base play handler for end turn card or middleware
-    #
-    # create double for deck factory in order to test against a specific deck
-    # and to introduce real card repartition
   end
 end

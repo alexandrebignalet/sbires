@@ -47,8 +47,7 @@ class Game
     card = player.find_card card_name
     raise Sbires::Error, "You don't own a card #{card_name}" if card.nil?
 
-    play = Play.new(self, player, card, play_params)
-    @play_mediator.notify(play)
+    @play_mediator.notify Play.new(self, player, card, play_params)
   end
 
   def finish_first_phase
