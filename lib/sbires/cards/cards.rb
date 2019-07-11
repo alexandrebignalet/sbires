@@ -10,5 +10,6 @@ module Cards
 
   module Middlewares
     require 'sbires/cards/middlewares/play_logger'
+    require 'sbires/cards/middlewares/player_turn'
   end
 end

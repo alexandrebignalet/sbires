@@ -50,6 +50,10 @@ RSpec.describe "Card play phase" do
       expect { @game.draw_card(@first_player.lord_name, CardType::DEMONSTRATION_AMUSEUR) }.to raise_error Sbires::Error
     end
 
+    it "should raise if not player's turn" do
+      expect { @game.draw_card(@second_player.lord_name, CardType::DEMONSTRATION_MENESTREL)}.to raise_error Sbires::Error
+    end
+
     it "should have lost a card in hand" do
       initial_card_number = @first_player.cards.length
       @game.draw_card(@first_player.lord_name, CardType::DEMONSTRATION_MENESTREL)
