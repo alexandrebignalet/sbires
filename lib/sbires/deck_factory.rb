@@ -135,36 +135,36 @@ class DeckFactory
 
   def self.create_salle_d_armes_cards
     [
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE, min_touch: 5, min_block: 5),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE, min_touch: 5, min_block: 5),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE, min_touch: 5, min_block: 5),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE, min_touch: 5, min_block: 5),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE, min_touch: 5, min_block: 5),
 
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::GOURDIN),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::GOURDIN),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::GOURDIN),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::GOURDIN),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::GOURDIN, min_touch: 4, min_block: 5),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::GOURDIN, min_touch: 4, min_block: 5),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::GOURDIN, min_touch: 4, min_block: 5),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::GOURDIN, min_touch: 4, min_block: 5),
 
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::HACHE),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::HACHE),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::HACHE),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::HACHE),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::HACHE, min_touch: 3, min_block: 5),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::HACHE, min_touch: 3, min_block: 5),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::HACHE, min_touch: 3, min_block: 5),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::HACHE, min_touch: 3, min_block: 5),
 
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::EPEE),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::EPEE, min_touch: 2, min_block: 4),
 
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES, min_touch: 5, min_block: 4),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES, min_touch: 5, min_block: 4),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES, min_touch: 5, min_block: 4),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES, min_touch: 5, min_block: 4),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES, min_touch: 5, min_block: 4),
 
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::ECU_DE_FER),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::ECU_DE_FER),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::ECU_DE_FER),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::ECU_DE_FER),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::ECU_DE_FER, min_touch: 5, min_block: 3),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::ECU_DE_FER, min_touch: 5, min_block: 3),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::ECU_DE_FER, min_touch: 5, min_block: 3),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::ECU_DE_FER, min_touch: 5, min_block: 3),
 
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::ARMURE_COMPLETE),
+        Card.new(NeighbourType::SALLE_D_ARMES, CardType::ARMURE_COMPLETE, min_touch: 4, min_block: 2),
 
         Card.new(NeighbourType::SALLE_D_ARMES, CardType::JOUVENCELLE),
 

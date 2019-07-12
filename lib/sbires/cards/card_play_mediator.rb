@@ -42,7 +42,7 @@ class CardPlayMediator
       handler = @handlers.detect { |h| h.listen_to(play.card) }
       raise StandardError, "Play associated with this card is not handle yet" if handler.nil?
 
-      puts "#{handler.class.name} handled #{play}"
+      # puts "#{handler.class.name} handled #{play}"
       handler.run(play)
     end
   end

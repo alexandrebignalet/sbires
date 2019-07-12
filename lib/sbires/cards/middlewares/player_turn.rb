@@ -9,8 +9,10 @@ module Middlewares
     end
 
     def prevent_end_turn?(card)
-      [CardType::BAGARRE_GENERALE,
-       CardType::GANT].include? card.name
+      is_specific_card = [CardType::BAGARRE_GENERALE,
+                       CardType::GANT].include? card.name
+
+      card.equipment? || is_specific_card
     end
   end
 end

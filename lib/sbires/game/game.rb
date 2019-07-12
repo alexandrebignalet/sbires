@@ -81,15 +81,15 @@ class Game
     neighbour
   end
 
+  def next_player_index
+    index_of_current_player = players.index { |p| p.lord_name == current_player.lord_name }
+    index_of_current_player == players.length - 1 ? 0 : index_of_current_player + 1
+  end
+
   private
 
   def create_neighbours(deck_factory)
     NEIGHBOURS_NAMES.map {|name| Neighbour.new(name, players.length, deck_factory)}
-  end
-
-  def next_player_index
-    index_of_current_player = players.index { |p| p.lord_name == current_player.lord_name }
-    index_of_current_player == players.length - 1 ? 0 : index_of_current_player + 1
   end
 
   def prepare_players(players)
