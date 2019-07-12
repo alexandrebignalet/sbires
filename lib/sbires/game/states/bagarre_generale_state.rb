@@ -12,7 +12,7 @@ class BagarreGeneraleState < PlayCards
     @discarded_opponents << lord_name
 
     @game.end_turn
-    @game.transition_to(PlayCards) if all_opponent_discarded?
+    @game.transition_to(PlayCards.new(@game)) if all_opponent_discarded?
   end
 
   private

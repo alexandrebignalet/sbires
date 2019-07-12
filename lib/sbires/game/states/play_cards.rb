@@ -18,6 +18,10 @@ class PlayCards
     player.discard_spare_in(card, neighbour)
   end
 
+  def roll_dice(lord_name)
+    raise Sbires::Error, "Not in duel"
+  end
+
   def place_pawn(lord_name, neighbour_name)
     raise_pawn_placement_over
   end

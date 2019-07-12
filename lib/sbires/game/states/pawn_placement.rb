@@ -25,7 +25,7 @@ class PawnPlacement
       dominant.pick_top_card_of_deck neighbour
     end
 
-    @game.transition_to PlayCards
+    @game.transition_to PlayCards.new(@game)
   end
 
   def draw_card(lord_name, card_name, play_params)

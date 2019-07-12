@@ -11,15 +11,15 @@ class DeckFactory
 
   def deck_by_neighbour
     {
-        NeighbourType::CHATEAU => create_chateau_cards,
-        NeighbourType::EGLISE => create_eglise_cards,
-        NeighbourType::GRAND_PLACE => create_grand_place_cards,
-        NeighbourType::SALLE_D_ARMES => create_salle_d_armes_cards,
-        NeighbourType::TAVERNE => create_taverne_cards
+        NeighbourType::CHATEAU => DeckFactory.create_chateau_cards.shuffle,
+        NeighbourType::EGLISE => DeckFactory.create_eglise_cards.shuffle,
+        NeighbourType::GRAND_PLACE => DeckFactory.create_grand_place_cards.shuffle,
+        NeighbourType::SALLE_D_ARMES => DeckFactory.create_salle_d_armes_cards.shuffle,
+        NeighbourType::TAVERNE => DeckFactory.create_taverne_cards.shuffle
     }
   end
 
-  def create_chateau_cards
+  def self.create_chateau_cards
     [
         Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_MENESTREL),
         Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_MENESTREL),
@@ -57,7 +57,7 @@ class DeckFactory
     ]
   end
 
-  def create_eglise_cards
+  def self.create_eglise_cards
     [
         Card.new(NeighbourType::EGLISE, CardType::PRIERE),
         Card.new(NeighbourType::EGLISE, CardType::PRIERE),
@@ -95,7 +95,7 @@ class DeckFactory
     ]
   end
 
-  def create_grand_place_cards
+  def self.create_grand_place_cards
     [
         Card.new(NeighbourType::GRAND_PLACE, CardType::GANT),
         Card.new(NeighbourType::GRAND_PLACE, CardType::GANT),
@@ -133,7 +133,7 @@ class DeckFactory
     ]
   end
 
-  def create_salle_d_armes_cards
+  def self.create_salle_d_armes_cards
     [
         Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE),
         Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE),
@@ -172,7 +172,7 @@ class DeckFactory
     ]
   end
 
-  def create_taverne_cards
+  def self.create_taverne_cards
     [
         Card.new(NeighbourType::TAVERNE, CardType::RAGOTS_ET_FORFANTERIES),
         Card.new(NeighbourType::TAVERNE, CardType::RAGOTS_ET_FORFANTERIES),

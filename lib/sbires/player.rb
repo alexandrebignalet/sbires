@@ -1,6 +1,8 @@
 class Player
   PAWN_PER_PLAYER = 8
   INITIAL_POINT_NUMBER = 5
+  ATTACK_SUCCEED_POINTS = 5
+  ATTACK_FAILED_POINTS = -1
 
   attr_reader :name, :lord_name, :pawns, :points, :cards, :spare
 
@@ -16,6 +18,10 @@ class Player
   def place_pawn_on(neighbour)
     raise Sbires::Error, "No more pawns to place" if all_pawns_placed?
     neighbour.receive_pawn_from(pawns.shift)
+  end
+
+  def all_pawns_placed?
+    pawns.length == 0
   end
 
   def pick_top_card_of_deck(neighbour)
@@ -42,8 +48,12 @@ class Player
     @spare << card
   end
 
-  def all_pawns_placed?
-    pawns.length == 0
+  def won_duel(points = nil)
+    @points += points.nil? ? ATTACK_SUCCEED_POINTS : points
+  end
+
+  def lost_duel(points = nil)
+    @points += points.nil? ? ATTACK_FAILED_POINTS : points
   end
 
   def find_card(card_name)
@@ -59,6 +69,6 @@ class Player
   end
 
   def == player
-    lord_name == player.lord_name
+    player.nil? ? false : lord_name == player.lord_name
   end
 end

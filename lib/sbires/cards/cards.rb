@@ -8,6 +8,7 @@ module Cards
     require 'sbires/cards/play_handlers/crieur_public'
     require 'sbires/cards/play_handlers/bagarre_generale'
     require 'sbires/cards/play_handlers/weapon'
+    require 'sbires/cards/play_handlers/gant'
   end
 
   module Middlewares

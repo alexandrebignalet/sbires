@@ -1,7 +1,7 @@
 module PlayHandlers
   class BagarreGenerale
     def run(play)
-      play.game.transition_to BagarreGeneraleState
+      play.game.transition_to BagarreGeneraleState.new(play.game)
 
       end_turn(play.game) if play.game.state.discardable_opponents.empty?
     end
@@ -13,7 +13,7 @@ module PlayHandlers
     private
     def end_turn(game)
       game.end_turn
-      game.transition_to PlayCards
+      game.transition_to PlayCards.new(game)
     end
   end
 end

@@ -26,16 +26,15 @@ class DeckFactoryMock
 
   def self.duel_deck
     {
-        NeighbourType::CHATEAU => [
-            Card.new(NeighbourType::CHATEAU,CardType::DEMONSTRATION_MENESTREL),
-            Card.new(NeighbourType::CHATEAU,CardType::DEMONSTRATION_MENESTREL),
-            Card.new(NeighbourType::CHATEAU,CardType::DEMONSTRATION_AMUSEUR),
-            Card.new(NeighbourType::CHATEAU,CardType::DEMONSTRATION_FABULISTE),
-            Card.new(NeighbourType::CHATEAU,CardType::DEMONSTRATION_AMUSEUR)],
-        NeighbourType::EGLISE => (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::EGLISE, CardType::FOSSOYEUR) },
-        NeighbourType::GRAND_PLACE => (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::GRAND_PLACE, CardType::CRIEUR_PUBLIC) },
-        NeighbourType::SALLE_D_ARMES => (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::ARMURE_COMPLETE) },
-        NeighbourType::TAVERNE => (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::TAVERNE, CardType::BAGARRE_GENERALE) }
+        NeighbourType::CHATEAU => DeckFactory.create_chateau_cards,
+        NeighbourType::EGLISE => DeckFactory.create_eglise_cards,
+        NeighbourType::GRAND_PLACE =>DeckFactory.create_grand_place_cards,
+        NeighbourType::SALLE_D_ARMES => [
+            Card.new(NeighbourType::SALLE_D_ARMES, CardType::EPEE),
+            Card.new(NeighbourType::SALLE_D_ARMES, CardType::ARMURE_COMPLETE),
+            *DeckFactory.create_salle_d_armes_cards
+        ].take(26),
+        NeighbourType::TAVERNE => DeckFactory.create_taverne_cards
     }
   end
 end

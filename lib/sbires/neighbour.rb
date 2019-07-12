@@ -12,7 +12,7 @@ class Neighbour
   end
 
   def receive_pawn_from(pawn)
-    raise Sbires::Error, "Neighbour is full" if full?
+    raise Sbires::Error, "Neighbour #{@name} is full" if full?
     @pawns << pawn
   end
 

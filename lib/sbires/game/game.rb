@@ -21,20 +21,20 @@ class Game
     @current_player = @players.sample
     @neighbours = create_neighbours DeckFactory.new
 
-    transition_to PawnPlacement
+    transition_to PawnPlacement.new(self)
   end
 
-  def transition_to(state_class)
-    @state = state_class.new self
+  def transition_to(state)
+    @state = state
   end
 
   ############# PAWN PLACEMENT ###########
   def place_pawn(lord_name, neighbour_name)
-    @state.place_pawn(lord_name, neighbour_name)
+    state.place_pawn(lord_name, neighbour_name)
   end
 
   def finish_first_phase
-    @state.finish_first_phase
+    state.finish_first_phase
   end
 
   def first_phase_over?
@@ -44,14 +44,22 @@ class Game
 
   ###### PLAY CARDS ##########
   def draw_card(lord_name, card_name, play_params = {})
-    @state.draw_card(lord_name, card_name, play_params)
+    state.draw_card(lord_name, card_name, play_params)
   end
 
   def discard_spare_card(lord_name, card_name)
-    @state.discard_spare_card(lord_name, card_name)
+    state.discard_spare_card(lord_name, card_name)
   end
 
   ###### PLAY CARDS ##########
+
+  ###### DUEL ##########
+
+  def roll_dice(lord_name)
+    state.roll_dice(lord_name)
+  end
+
+  ###### DUEL ##########
 
   def end_turn
     @current_player = players[next_player_index]
