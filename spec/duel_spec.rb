@@ -10,17 +10,21 @@ RSpec.describe "Duel" do
     pawn_placement
   end
 
-  it "should raise if target is not given" do
+  it "should raise if opponent is not given" do
     expect { @game.draw_card(@attacker.lord_name, CardType::GANT) }.to raise_error Sbires::Error
   end
 
-  it "should raise if target is unknown" do
-    expect { @game.draw_card(@attacker.lord_name, CardType::GANT, target: "unknown") }.to raise_error Sbires::Error
+  it "should raise if opponent is the attacker" do
+    expect { @game.draw_card(@attacker.lord_name, CardType::GANT, opponent: @attacker.lord_name) }.to raise_error Sbires::Error
+  end
+
+  it "should raise if opponent is unknown" do
+    expect { @game.draw_card(@attacker.lord_name, CardType::GANT, opponent: "unknown") }.to raise_error Sbires::Error
   end
 
   context "duel launch" do
     before do
-      @game.draw_card(@attacker.lord_name, CardType::GANT, target: @defender.lord_name)
+      @game.draw_card(@attacker.lord_name, CardType::GANT, opponent: @defender.lord_name)
     end
 
     it "should set the game in duel state" do
@@ -32,16 +36,12 @@ RSpec.describe "Duel" do
     end
 
     it "should expose succeeded attack number" do
-      dice_result = [6, 6, 6]
-      allow_any_instance_of(DiceRoller).to receive(:roll).and_return dice_result
+      mock_roll = [6, 6, 6]
+      allow_any_instance_of(DiceRoller).to receive(:roll).and_return mock_roll
 
-      result = @game.roll_dice(@attacker.lord_name)
+      dice_result = @game.roll_dice(@attacker.lord_name)
 
-      expect(result[:dice_result]).to eq dice_result
-      expect(result[:touches]).to eq 3
-      expect(result[:blocks]).to eq nil
-      expect(result[:winner]).to eq nil
-      expect(result[:loser]).to eq nil
+      expect(dice_result).to eq mock_roll
     end
 
     it "should only allow defender to roll dice after attacker" do
@@ -54,16 +54,16 @@ RSpec.describe "Duel" do
     end
 
     it "should expose succeeded blocks number" do
-      dice_result = [6, 6, 6]
-      allow_any_instance_of(DiceRoller).to receive(:roll).and_return dice_result
+      mock_attack_roll = [6, 6, 6]
+      allow_any_instance_of(DiceRoller).to receive(:roll).and_return mock_attack_roll
       @game.roll_dice(@attacker.lord_name)
 
-      dice_result = [1, 2, 6]
-      allow_any_instance_of(DiceRoller).to receive(:roll).and_return dice_result
+      mock_defense_roll = [1, 2, 6]
+      allow_any_instance_of(DiceRoller).to receive(:roll).and_return mock_defense_roll
+      @game.roll_dice(@defender.lord_name)
 
-      result = @game.roll_dice(@defender.lord_name)
+      result = @game.end_turn
 
-      expect(result[:dice_result]).to eq dice_result
       expect(result[:touches]).to eq 3
       expect(result[:blocks]).to eq 1
       expect(result[:winner]).to eq @attacker
@@ -77,9 +77,10 @@ RSpec.describe "Duel" do
       defender_dice_result = [6]
       allow_any_instance_of(DiceRoller).to receive(:roll).with(1).and_return defender_dice_result
 
-      result = @game.roll_dice(@defender.lord_name)
+      @game.roll_dice(@defender.lord_name)
 
-      expect(result[:dice_result]).to eq defender_dice_result
+      result = @game.end_turn
+
       expect(result[:touches]).to eq 1
       expect(result[:blocks]).to eq 1
       expect(result[:winner]).to eq @defender
@@ -89,18 +90,18 @@ RSpec.describe "Duel" do
     it "should not make defender roll dice if attacker did not make any touches" do
       attacker_dice_roll = [1, 1, 1]
       allow_any_instance_of(DiceRoller).to receive(:roll).and_return attacker_dice_roll
-      result = @game.roll_dice(@attacker.lord_name)
+      @game.roll_dice(@attacker.lord_name)
 
-      expect(result[:dice_result]).to eq attacker_dice_roll
+      result = @game.end_turn
+
       expect(result[:touches]).to eq 0
-      expect(result[:blocks]).to eq nil
+      expect(result[:blocks]).to eq 0
       expect(result[:winner]).to eq @defender
       expect(result[:loser]).to eq @attacker
+
       expect(@attacker.points).to eq 4
       expect(@defender.points).to eq 7
     end
-
-    # raise if rolls after end of turn
 
     context "attacker wins" do
       before do
@@ -109,6 +110,8 @@ RSpec.describe "Duel" do
 
         allow_any_instance_of(DiceRoller).to receive(:roll).and_return [1, 2, 3]
         @game.roll_dice(@defender.lord_name)
+
+        @game.end_turn
       end
 
       it "should add 5 points to the attacker" do
@@ -136,6 +139,8 @@ RSpec.describe "Duel" do
 
         allow_any_instance_of(DiceRoller).to receive(:roll).and_return [6]
         @game.roll_dice(@defender.lord_name)
+
+        @game.end_turn
       end
 
       it "should remove 1 points to the attacker" do
@@ -203,7 +208,9 @@ RSpec.describe "Duel" do
         @game.draw_card(@defender.lord_name, CardType::COTTE_DE_MAILLES)
 
         allow_any_instance_of(DiceRoller).to receive(:roll).and_return [4, 4, 4]
-        result = @game.roll_dice(@defender.lord_name)
+        @game.roll_dice(@defender.lord_name)
+
+        result = @game.end_turn
 
         expect(result[:blocks]).to eq 3
         expect(result[:winner]).to eq @defender
@@ -223,9 +230,15 @@ RSpec.describe "Duel" do
         @game.draw_card(@attacker.lord_name, CardType::EPEE)
 
         allow_any_instance_of(DiceRoller).to receive(:roll).and_return [2, 3, 4]
-        result = @game.roll_dice(@attacker.lord_name)
+        @game.roll_dice(@attacker.lord_name)
+
+        allow_any_instance_of(DiceRoller).to receive(:roll).and_return [6, 6, 4]
+        @game.roll_dice(@defender.lord_name)
+
+        result = @game.end_turn
 
         expect(result[:touches]).to eq 3
+        expect(result[:winner]).to eq @attacker
       end
 
       it "should make dice range success bigger according on equipment used for defense" do
@@ -236,10 +249,43 @@ RSpec.describe "Duel" do
         @game.roll_dice(@attacker.lord_name)
 
         allow_any_instance_of(DiceRoller).to receive(:roll).and_return [3, 4, 4]
-        result = @game.roll_dice(@defender.lord_name)
+        @game.roll_dice(@defender.lord_name)
+
+        result = @game.end_turn
 
         expect(result[:touches]).to eq 3
         expect(result[:blocks]).to eq 2
+      end
+    end
+
+    context "end of a duel" do
+      it "should not allow ending the turn if attack not done" do
+        expect { @game.end_turn }.to raise_error Sbires::Error
+      end
+
+      it "should not allow ending the turn if attack succeed and defense not done" do
+        @game.draw_card(@attacker.lord_name, CardType::EPEE)
+        @game.draw_card(@defender.lord_name, CardType::COTTE_DE_MAILLES)
+
+        allow_any_instance_of(DiceRoller).to receive(:roll).and_return [2, 3, 2]
+        @game.roll_dice(@attacker.lord_name)
+
+        expect { @game.end_turn }.to raise_error Sbires::Error
+      end
+
+      it "should allow to end the turn if attack and defense done" do
+        @game.draw_card(@attacker.lord_name, CardType::EPEE)
+        @game.draw_card(@defender.lord_name, CardType::COTTE_DE_MAILLES)
+
+        allow_any_instance_of(DiceRoller).to receive(:roll).and_return [2, 3, 2]
+        @game.roll_dice(@attacker.lord_name)
+
+        allow_any_instance_of(DiceRoller).to receive(:roll).and_return [3, 4, 4]
+        @game.roll_dice(@defender.lord_name)
+
+        @game.end_turn
+
+        expect(@game.current_player).to eq @defender
       end
     end
   end

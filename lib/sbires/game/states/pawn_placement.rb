@@ -17,6 +17,8 @@ class PawnPlacement
     @game.end_turn
   end
 
+  def end_turn; end
+
   def finish_first_phase
     @game.neighbours.each do |neighbour|
       next unless neighbour.dominant

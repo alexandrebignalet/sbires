@@ -1,6 +1,5 @@
 require "bundler/setup"
 require "sbires"
-require 'pry-byebug'
 require_relative './mocks/deck_factory_mock'
 
 RSpec.configure do |config|

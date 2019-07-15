@@ -5,29 +5,7 @@ RSpec.describe "Demonstration card played" do
     @first_player = @game.current_player
     @second_player = @game.players.detect { |p| p != @first_player }
 
-    @game.place_pawn(@first_player.lord_name, NeighbourType::CHATEAU)
-    @game.place_pawn(@second_player.lord_name, NeighbourType::CHATEAU)
-
-    @game.place_pawn(@first_player.lord_name, NeighbourType::CHATEAU)
-    @game.place_pawn(@second_player.lord_name, NeighbourType::EGLISE)
-
-    @game.place_pawn(@first_player.lord_name, NeighbourType::CHATEAU)
-    @game.place_pawn(@second_player.lord_name, NeighbourType::EGLISE)
-
-    @game.place_pawn(@first_player.lord_name, NeighbourType::SALLE_D_ARMES)
-    @game.place_pawn(@second_player.lord_name, NeighbourType::EGLISE)
-
-    @game.place_pawn(@first_player.lord_name, NeighbourType::TAVERNE)
-    @game.place_pawn(@second_player.lord_name, NeighbourType::TAVERNE)
-
-    @game.place_pawn(@first_player.lord_name, NeighbourType::TAVERNE)
-    @game.place_pawn(@second_player.lord_name, NeighbourType::TAVERNE)
-
-    @game.place_pawn(@first_player.lord_name, NeighbourType::GRAND_PLACE)
-    @game.place_pawn(@second_player.lord_name, NeighbourType::GRAND_PLACE)
-
-    @game.place_pawn(@first_player.lord_name, NeighbourType::SALLE_D_ARMES)
-    @game.place_pawn(@second_player.lord_name, NeighbourType::GRAND_PLACE)
+    pawn_placement
   end
 
   it "should add menestrel to his spare" do
@@ -60,5 +38,31 @@ RSpec.describe "Demonstration card played" do
 
     expect { @game.draw_card(@first_player.lord_name, CardType::DEMONSTRATION_AMUSEUR) }.to raise_error Sbires::Error
 
+  end
+
+  def pawn_placement
+    @game.place_pawn(@first_player.lord_name, NeighbourType::CHATEAU)
+    @game.place_pawn(@second_player.lord_name, NeighbourType::CHATEAU)
+
+    @game.place_pawn(@first_player.lord_name, NeighbourType::CHATEAU)
+    @game.place_pawn(@second_player.lord_name, NeighbourType::EGLISE)
+
+    @game.place_pawn(@first_player.lord_name, NeighbourType::CHATEAU)
+    @game.place_pawn(@second_player.lord_name, NeighbourType::EGLISE)
+
+    @game.place_pawn(@first_player.lord_name, NeighbourType::SALLE_D_ARMES)
+    @game.place_pawn(@second_player.lord_name, NeighbourType::EGLISE)
+
+    @game.place_pawn(@first_player.lord_name, NeighbourType::TAVERNE)
+    @game.place_pawn(@second_player.lord_name, NeighbourType::TAVERNE)
+
+    @game.place_pawn(@first_player.lord_name, NeighbourType::TAVERNE)
+    @game.place_pawn(@second_player.lord_name, NeighbourType::TAVERNE)
+
+    @game.place_pawn(@first_player.lord_name, NeighbourType::GRAND_PLACE)
+    @game.place_pawn(@second_player.lord_name, NeighbourType::GRAND_PLACE)
+
+    @game.place_pawn(@first_player.lord_name, NeighbourType::SALLE_D_ARMES)
+    @game.place_pawn(@second_player.lord_name, NeighbourType::GRAND_PLACE)
   end
 end

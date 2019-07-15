@@ -1,6 +1,8 @@
 module PlayHandlers
   class CrieurPublic
     def run(play)
+      raise Sbires::Error, "Not your turn" unless play.submitter == play.game.current_player
+
       current_player = play.game.current_player
 
       grand_place = play.game.find_neighbour play.card.neighbour_name
@@ -13,6 +15,8 @@ module PlayHandlers
         neighbour = neighbour_dominant.last
         current_player.pick_top_card_of_deck neighbour
       end
+
+      play.game.end_turn
     end
 
     def listen_to(card)

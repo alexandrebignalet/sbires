@@ -59,11 +59,11 @@ class DeckFactory
 
   def self.create_eglise_cards
     [
-        Card.new(NeighbourType::EGLISE, CardType::PRIERE),
-        Card.new(NeighbourType::EGLISE, CardType::PRIERE),
-        Card.new(NeighbourType::EGLISE, CardType::PRIERE),
-        Card.new(NeighbourType::EGLISE, CardType::PRIERE),
-        Card.new(NeighbourType::EGLISE, CardType::PRIERE),
+        Card.new(NeighbourType::EGLISE, CardType::PRIERE, buff: true),
+        Card.new(NeighbourType::EGLISE, CardType::PRIERE, buff: true),
+        Card.new(NeighbourType::EGLISE, CardType::PRIERE, buff: true),
+        Card.new(NeighbourType::EGLISE, CardType::PRIERE, buff: true),
+        Card.new(NeighbourType::EGLISE, CardType::PRIERE, buff: true),
 
         Card.new(NeighbourType::EGLISE, CardType::EAU_BENITE),
         Card.new(NeighbourType::EGLISE, CardType::EAU_BENITE),

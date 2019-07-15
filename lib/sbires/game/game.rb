@@ -38,7 +38,7 @@ class Game
   end
 
   def first_phase_over?
-    players.all? { |p| p.all_pawns_placed? }
+    players.all?(&:all_pawns_placed?)
   end
   ###### PAWN PLACEMENT ########
 
@@ -63,6 +63,7 @@ class Game
 
   def end_turn
     @current_player = players[next_player_index]
+    state.end_turn
   end
 
   def neighbours_dominants

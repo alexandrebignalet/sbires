@@ -10,6 +10,8 @@ class PlayCards
     @game.play_mediator.notify Play.new(@game, player, card, play_params)
   end
 
+  def end_turn; end
+
   def discard_spare_card(lord_name, card_name)
     player = @game.find_player lord_name
     card = player.find_card_in_spare card_name

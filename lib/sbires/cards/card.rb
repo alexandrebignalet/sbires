@@ -10,4 +10,8 @@ class Card
   def equipment?
     !!(min_touch && min_block)
   end
+
+  def buff?
+    !!@buff
+  end
 end
