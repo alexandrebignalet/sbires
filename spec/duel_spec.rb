@@ -201,19 +201,11 @@ RSpec.describe "Duel" do
         expect { @game.draw_card(@attacker.lord_name, CardType::EPEE) }.to raise_error Sbires::Error
       end
 
-      it "should allow defender to equip after attacker rolled his dices" do
+      it "should not allow defender to equip after attacker rolled his dices" do
         allow_any_instance_of(DiceRoller).to receive(:roll).and_return [6, 6, 6]
         @game.roll_dice(@attacker.lord_name)
 
-        @game.draw_card(@defender.lord_name, CardType::COTTE_DE_MAILLES)
-
-        allow_any_instance_of(DiceRoller).to receive(:roll).and_return [4, 4, 4]
-        @game.roll_dice(@defender.lord_name)
-
-        result = @game.end_turn
-
-        expect(result[:blocks]).to eq 3
-        expect(result[:winner]).to eq @defender
+        expect { @game.draw_card(@defender.lord_name, CardType::COTTE_DE_MAILLES) }.to raise_error Sbires::Error
       end
 
       it "should not allow defender to equip after rolling his dices" do

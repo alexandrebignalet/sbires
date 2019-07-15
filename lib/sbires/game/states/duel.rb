@@ -68,7 +68,7 @@ class Duel < PlayCards
   end
 
   def equip_defender(card)
-    raise Sbires::Error, "You can only draw equipment card after a gant card" unless defense_not_done?
+    raise Sbires::Error, "Defender cannot equip after attacker rolled his dices" unless attack_not_done?
     raise Sbires::Error, "Defender cannot change equipment" if @defender_equipment
 
     @defender_equipment = card
