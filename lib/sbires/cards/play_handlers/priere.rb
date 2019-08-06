@@ -8,14 +8,17 @@ module PlayHandlers
       @player = play.submitter
       @card = play.card
 
-      raise Sbires::Error, "Not in duel" unless @game_state.is_a? Duel
-      raise Sbires::Error, "You are not in the duel" unless attacker_plays? || defender_plays?
-      raise Sbires::Error, "You must use this card after rolling dices" unless attacker_and_attacked? || defender_and_defended?
-      raise Sbires::Error, "Too late defender already played" if attacker_and_attacked? && defended?
-      rerolled_dice = play.params[:reroll_dice]
-      raise Sbires::Error, "You must target a dice to reroll" if rerolled_dice.nil?
+      if @game_state.is_a? Duel
+        raise Sbires::Error, "You are not in the duel" unless attacker_plays? || defender_plays?
+        raise Sbires::Error, "You must use this card after rolling dices" unless attacker_and_attacked? || defender_and_defended?
+        raise Sbires::Error, "Too late defender already played" if attacker_and_attacked? && defended?
+        rerolled_dice = play.params[:reroll_dice]
+        raise Sbires::Error, "You must target a dice to reroll" if rerolled_dice.nil?
 
-      attacker_plays? ? @game_state.reroll_attack_dice(rerolled_dice) : @game_state.reroll_defense_dice(rerolled_dice)
+        attacker_plays? ? @game_state.reroll_attack_dice(rerolled_dice) : @game_state.reroll_defense_dice(rerolled_dice)
+      else
+        @player.spare_card @card
+      end
     end
 
     def listen_to(card)

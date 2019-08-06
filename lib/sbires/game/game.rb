@@ -12,14 +12,29 @@ class Game
 
   attr_reader :players, :current_player, :neighbours, :state, :play_mediator
 
-  def initialize(players)
+  def self.prepare_players(player_names)
+    remaining_lord_names = Game::LORD_NAMES.dup
+    player_names.map do |name|
+      Player.new(name, remaining_lord_names.shift)
+    end
+  end
+
+  def self.prepare_neighbours(players_count, deck_factory = DeckFactory.new)
+    NEIGHBOURS_NAMES.map {|name| Neighbour.new(name, players_count, deck_factory)}
+  end
+
+  def initialize(players,
+                 current_player_index: 0,
+                 neighbours: Game.prepare_neighbours(players.length),
+                 mediator: CardPlayMediator.new)
     raise Sbires::Error, "Not enough player to start the game" if players.length < MIN_PLAYERS_IN_GAME
     raise Sbires::Error, "Too much players to start the game" if players.length > MAX_PLAYERS_IN_GAME
 
-    @play_mediator = CardPlayMediator.new
-    @players = prepare_players(players)
-    @current_player = @players.sample
-    @neighbours = create_neighbours DeckFactory.new
+    @play_mediator = mediator
+    @players = players
+    @current_player = players[current_player_index]
+    @neighbours = neighbours
+    @turn_skippers = []
 
     transition_to PawnPlacement.new(self)
   end
@@ -62,8 +77,15 @@ class Game
   ###### DUEL ##########
 
   def end_turn
-    @current_player = players[next_player_index]
+    @current_player = find_next_player
     state.end_turn
+  end
+
+  def end_day_for(player)
+    raise Sbires::Error, "Not your turn" unless current_player == player
+    raise Sbires::Error, "Cannot end of day before play cards phase" unless state.is_a? PlayCards
+    @turn_skippers << player
+    end_turn
   end
 
   def neighbours_dominants
@@ -84,17 +106,14 @@ class Game
 
   def next_player_index
     index_of_current_player = players.index { |p| p.lord_name == current_player.lord_name }
+
     index_of_current_player == players.length - 1 ? 0 : index_of_current_player + 1
   end
 
   private
 
-  def create_neighbours(deck_factory)
-    NEIGHBOURS_NAMES.map {|name| Neighbour.new(name, players.length, deck_factory)}
-  end
-
-  def prepare_players(players)
-    remaining_lord_names = LORD_NAMES.dup
-    players.map {|name| Player.new(name, remaining_lord_names.shift)}
+  def find_next_player
+    next_player = players[next_player_index]
+    @turn_skippers.include?(next_player) ? players[next_player_index + 1] : next_player
   end
 end

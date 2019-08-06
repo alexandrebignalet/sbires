@@ -2,8 +2,11 @@ RSpec.describe "Priere cards played" do
 
   before do
     allow_any_instance_of(DeckFactory).to receive(:deck_by_neighbour).and_return DeckFactoryMock.duel_deck
-    @game = Game.new(%w(jean mich hugs))
-
+    remaining_lord_names = Game::LORD_NAMES.dup
+    first_player = Player.new('mich', remaining_lord_names.shift)
+    second_player = Player.new('jean', remaining_lord_names.shift, spare: [1, 2, 3, 4, 5, 6, 7, 8])
+    third_player = Player.new('hugs', remaining_lord_names.shift)
+    @game = Game.new([first_player, second_player, third_player], current_player_index: 0)
     @first_player = @game.current_player
     @second_player = @game.players[@game.next_player_index]
     @third_player = @game.players.detect { |p| p != @first_player && p != @second_player }
@@ -11,8 +14,19 @@ RSpec.describe "Priere cards played" do
     pawn_placement
   end
 
-  it "should not be played outside a duel" do
-    expect { @game.draw_card(@first_player.lord_name, CardType::PRIERE) }.to raise_error Sbires::Error
+  context "outside a duel" do
+    before do
+      @game.draw_card(@first_player.lord_name, CardType::PRIERE)
+      @game.end_turn
+    end
+
+    it "should add the card in current player spare" do
+      expect(@first_player.spare).to include( have_attributes(name: CardType::PRIERE) )
+    end
+
+    it "should raise if player spare is full" do
+      expect { @game.draw_card(@second_player.lord_name, CardType::PRIERE) }.to raise_error Sbires::Error
+    end
   end
 
   context "during a duel" do

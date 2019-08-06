@@ -34,16 +34,16 @@ class CardPlayMediator
   end
 
   class InvokePlayHandler
-    def initialize
-      @handlers = PlayHandlers.constants.map { |h| PlayHandlers.const_get(h).send(:new) }
-    end
+      def initialize
+        @handlers = PlayHandlers.constants.map { |h| PlayHandlers.const_get(h).send(:new) }
+      end
 
-    def intercept(play, next_middleware)
-      handler = @handlers.detect { |h| h.listen_to(play.card) }
-      raise StandardError, "Play associated with this card is not handle yet" if handler.nil?
+      def intercept(play, next_middleware)
+        handler = @handlers.detect { |h| h.listen_to(play.card) }
+        raise StandardError, "Play associated with this card is not handle yet" if handler.nil?
 
-      # puts "#{handler.class.name} handled #{play}"
-      handler.run(play)
+        # puts "#{handler.class.name} handled #{play}"
+        handler.run(play)
     end
   end
 end

@@ -4,16 +4,20 @@ class Player
   ATTACK_SUCCEED_POINTS = 5
   DEFENSE_SUCCESS_POINTS = 2
   ATTACK_FAILED_POINTS = -1
+  SPARE_MAX_CAPACITY = 8
 
   attr_reader :name, :lord_name, :pawns, :points, :cards, :spare
 
-  def initialize(name, lord_name)
+  def initialize(name, lord_name, points: INITIAL_POINT_NUMBER,
+                                  pawns: (0...PAWN_PER_PLAYER).map { Pawn.new(lord_name) },
+                                  cards: [],
+                                  spare: [])
     @name = name
     @lord_name = lord_name
-    @points = INITIAL_POINT_NUMBER
-    @pawns = (0...PAWN_PER_PLAYER).map { Pawn.new(@lord_name) }
-    @cards = []
-    @spare = []
+    @points = points
+    @pawns = pawns
+    @cards = cards
+    @spare = spare
   end
 
   def place_pawn_on(neighbour)
@@ -45,8 +49,14 @@ class Player
   end
 
   def spare_card(card)
+    raise Sbires::Error, "Spare full" if spare_full?
+
     @cards.delete card
     @spare << card
+  end
+
+  def spare_full?
+    @spare.length == SPARE_MAX_CAPACITY
   end
 
   def won_duel(points = nil)

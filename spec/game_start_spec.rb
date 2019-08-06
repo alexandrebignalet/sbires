@@ -9,7 +9,8 @@ RSpec.describe Sbires do
 
   context "when game start" do
     before do
-      @game = Game.new(player_names)
+      players = Game.prepare_players(player_names)
+      @game = Game.new(players)
       @players = @game.players
       @player_one = @players.first
       @player_two = @players.last

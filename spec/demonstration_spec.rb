@@ -1,7 +1,8 @@
 RSpec.describe "Demonstration card played" do
   before do
     allow_any_instance_of(DeckFactory).to receive(:deck_by_neighbour).and_return(DeckFactoryMock.with_the_three_demonstrations)
-    @game = Game.new(%w(jean francois))
+    players = Game.prepare_players(%w(jean francois))
+    @game = Game.new(players)
     @first_player = @game.current_player
     @second_player = @game.players.detect { |p| p != @first_player }
 

@@ -2,25 +2,25 @@ RSpec.describe Sbires do
   let(:player_names) { %w(Jean Francois) }
 
   before do
-    @game = Game.new(player_names)
+    players = Game.prepare_players(player_names)
+    @game = Game.new(players)
     @players = @game.players
     @player_one = @players.first
     @player_two = @players.last
 
-    @chateau = Game::NEIGHBOURS_NAMES.first
     @first_player = @game.current_player
-    @game.place_pawn(@first_player.lord_name, @chateau)
+    @game.place_pawn(@first_player.lord_name, NeighbourType::CHATEAU)
   end
 
   it "game should not allow a player to place multiple pawns consecutively" do
-    expect { @game.place_pawn(@first_player.lord_name, Game::NEIGHBOURS_NAMES.first) }.to raise_error Sbires::Error
+    expect { @game.place_pawn(@first_player.lord_name, NeighbourType::CHATEAU) }.to raise_error Sbires::Error
   end
 
   it "after pawn placement player should pick a card on its neighbour" do
     expect(@first_player.cards.length).to eq 1
-    expect(@first_player.cards.first.neighbour_name).to eq Game::NEIGHBOURS_NAMES.first
+    expect(@first_player.cards.first.neighbour_name).to eq NeighbourType::CHATEAU
 
-    neighbour = @game.neighbours.detect { |n| n.name == Game::NEIGHBOURS_NAMES.first }
+    neighbour = @game.neighbours.detect { |n| n.name == NeighbourType::CHATEAU }
     expect(neighbour.deck.length).to eq Neighbour::CARD_NUMBER_PER_NEIGHBOUR - 1
     expect(neighbour.discard.length).to eq 0
   end
@@ -30,32 +30,28 @@ RSpec.describe Sbires do
       @second_player = @players.detect { |p| p.lord_name == @game.current_player.lord_name }
       @first_player = @players.detect { |p| p.lord_name != @second_player.lord_name }
 
-      @eglise = Game::NEIGHBOURS_NAMES.last
-      @taverne = Game::NEIGHBOURS_NAMES.first(2).last
-      @salle_d_armes = Game::NEIGHBOURS_NAMES.first(3).last
+      @game.place_pawn(@second_player.lord_name, NeighbourType::EGLISE)
+      @game.place_pawn(@first_player.lord_name, NeighbourType::CHATEAU)
 
-      @game.place_pawn(@second_player.lord_name, @eglise)
-      @game.place_pawn(@first_player.lord_name, @chateau)
+      @game.place_pawn(@second_player.lord_name, NeighbourType::EGLISE)
+      @game.place_pawn(@first_player.lord_name, NeighbourType::CHATEAU)
 
-      @game.place_pawn(@second_player.lord_name, @eglise)
-      @game.place_pawn(@first_player.lord_name, @chateau)
+      @game.place_pawn(@second_player.lord_name, NeighbourType::EGLISE)
+      @game.place_pawn(@first_player.lord_name, NeighbourType::CHATEAU)
 
-      @game.place_pawn(@second_player.lord_name, @eglise)
-      @game.place_pawn(@first_player.lord_name, @chateau)
+      @game.place_pawn(@second_player.lord_name, NeighbourType::EGLISE)
 
-      @game.place_pawn(@second_player.lord_name, @eglise)
+      @game.place_pawn(@first_player.lord_name, NeighbourType::TAVERNE)
+      @game.place_pawn(@second_player.lord_name, NeighbourType::TAVERNE)
 
-      @game.place_pawn(@first_player.lord_name, @taverne)
-      @game.place_pawn(@second_player.lord_name, @taverne)
+      @game.place_pawn(@first_player.lord_name, NeighbourType::TAVERNE)
+      @game.place_pawn(@second_player.lord_name, NeighbourType::TAVERNE)
 
-      @game.place_pawn(@first_player.lord_name, @taverne)
-      @game.place_pawn(@second_player.lord_name, @taverne)
+      @game.place_pawn(@first_player.lord_name, NeighbourType::SALLE_D_ARMES)
+      @game.place_pawn(@second_player.lord_name, NeighbourType::SALLE_D_ARMES)
 
-      @game.place_pawn(@first_player.lord_name, @salle_d_armes)
-      @game.place_pawn(@second_player.lord_name, @salle_d_armes)
-
-      @game.place_pawn(@first_player.lord_name, @salle_d_armes)
-      @game.place_pawn(@second_player.lord_name, @salle_d_armes)
+      @game.place_pawn(@first_player.lord_name, NeighbourType::SALLE_D_ARMES)
+      @game.place_pawn(@second_player.lord_name, NeighbourType::SALLE_D_ARMES)
     end
 
     it "should know when each player has placed all of its pawns" do
@@ -68,10 +64,10 @@ RSpec.describe Sbires do
 
     it "should give one more card from a neighbour to player with domination its neighbour" do
       expect(@second_player.cards.length).to eq 9
-      eglise_cards = @second_player.cards.select { |c| c.neighbour_name == @eglise }
+      eglise_cards = @second_player.cards.select { |c| c.neighbour_name == NeighbourType::EGLISE }
       expect(eglise_cards.length).to eq 5
       expect(@first_player.cards.length).to eq 9
-      chateau_cards = @first_player.cards.select { |c| c.neighbour_name == @chateau }
+      chateau_cards = @first_player.cards.select { |c| c.neighbour_name == NeighbourType::CHATEAU }
       expect(chateau_cards.length).to eq 5
     end
   end
