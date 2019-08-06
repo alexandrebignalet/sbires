@@ -37,6 +37,14 @@ RSpec.describe "End of day" do
 
       expect(@game.current_player).to eq @second_player
     end
+
+    it "should go to the next day if every player ended theirs" do
+      @game.end_day_for @first_player
+      @game.end_day_for @second_player
+      @game.end_day_for @third_player
+
+      expect(@game.current_day).to eq(2)
+    end
   end
 
   def pawn_placement

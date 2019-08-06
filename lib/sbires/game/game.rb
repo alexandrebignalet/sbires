@@ -10,7 +10,7 @@ class Game
   MIN_PLAYERS_IN_GAME = 2
   MAX_PLAYERS_IN_GAME = 5
 
-  attr_reader :players, :current_player, :neighbours, :state, :play_mediator
+  attr_reader :players, :current_player, :neighbours, :state, :play_mediator, :current_day
 
   def self.prepare_players(player_names)
     remaining_lord_names = Game::LORD_NAMES.dup
@@ -25,15 +25,18 @@ class Game
 
   def initialize(players,
                  current_player_index: 0,
+                 current_day: 1,
                  neighbours: Game.prepare_neighbours(players.length),
                  mediator: CardPlayMediator.new)
     raise Sbires::Error, "Not enough player to start the game" if players.length < MIN_PLAYERS_IN_GAME
     raise Sbires::Error, "Too much players to start the game" if players.length > MAX_PLAYERS_IN_GAME
 
     @play_mediator = mediator
+
     @players = players
     @current_player = players[current_player_index]
     @neighbours = neighbours
+    @current_day = current_day
     @turn_skippers = []
 
     transition_to PawnPlacement.new(self)
@@ -84,7 +87,10 @@ class Game
   def end_day_for(player)
     raise Sbires::Error, "Not your turn" unless current_player == player
     raise Sbires::Error, "Cannot end of day before play cards phase" unless state.is_a? PlayCards
+
     @turn_skippers << player
+    @current_day += 1 if @turn_skippers.size == players.size
+
     end_turn
   end
 
