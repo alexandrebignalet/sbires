@@ -48,6 +48,10 @@ class Player
     @spare.delete card
   end
 
+  def reset
+    Player.new(name, lord_name, points: points)
+  end
+
   def spare_card(card)
     raise Sbires::Error, "Spare full" if spare_full?
 

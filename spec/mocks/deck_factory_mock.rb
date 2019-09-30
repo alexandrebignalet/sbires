@@ -6,22 +6,22 @@ class DeckFactoryMock
         NeighbourType::GRAND_PLACE => (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::GRAND_PLACE, CardType::CRIEUR_PUBLIC) },
         NeighbourType::SALLE_D_ARMES => (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::ARMURE_COMPLETE, min_touch: 4, min_block: 2) },
         NeighbourType::TAVERNE => (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::TAVERNE, CardType::BAGARRE_GENERALE) }
-    }
+    }.dup
   end
 
   def self.with_the_three_demonstrations
     {
         NeighbourType::CHATEAU => [
-            Card.new(NeighbourType::CHATEAU,CardType::DEMONSTRATION_MENESTREL),
-            Card.new(NeighbourType::CHATEAU,CardType::DEMONSTRATION_MENESTREL),
-            Card.new(NeighbourType::CHATEAU,CardType::DEMONSTRATION_AMUSEUR),
-            Card.new(NeighbourType::CHATEAU,CardType::DEMONSTRATION_FABULISTE),
-            Card.new(NeighbourType::CHATEAU,CardType::DEMONSTRATION_AMUSEUR)],
+            Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_MENESTREL),
+            Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_MENESTREL),
+            Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_AMUSEUR),
+            Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_FABULISTE),
+            Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_AMUSEUR)],
         NeighbourType::EGLISE => (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::EGLISE, CardType::FOSSOYEUR) },
         NeighbourType::GRAND_PLACE => (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::GRAND_PLACE, CardType::CRIEUR_PUBLIC) },
         NeighbourType::SALLE_D_ARMES => (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::ARMURE_COMPLETE, min_touch: 4, min_block: 2) },
         NeighbourType::TAVERNE => (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::TAVERNE, CardType::BAGARRE_GENERALE) }
-    }
+    }.dup
   end
 
   def self.duel_deck
@@ -36,6 +36,6 @@ class DeckFactoryMock
             *DeckFactory.create_salle_d_armes_cards
         ].take(26),
         NeighbourType::TAVERNE => DeckFactory.create_taverne_cards
-    }
+    }.dup
   end
 end

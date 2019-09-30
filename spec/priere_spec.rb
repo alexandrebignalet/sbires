@@ -1,7 +1,7 @@
 RSpec.describe "Priere cards played" do
 
   before do
-    allow_any_instance_of(DeckFactory).to receive(:deck_by_neighbour).and_return DeckFactoryMock.duel_deck
+    allow_any_instance_of(DeckFactory).to receive(:factories).and_return DeckFactoryMock.duel_deck
     remaining_lord_names = Game::LORD_NAMES.dup
     first_player = Player.new('mich', remaining_lord_names.shift)
     second_player = Player.new('jean', remaining_lord_names.shift, spare: [1, 2, 3, 4, 5, 6, 7, 8])

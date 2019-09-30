@@ -1,9 +1,10 @@
 RSpec.describe "Duel" do
 
   before do
-    allow_any_instance_of(DeckFactory).to receive(:deck_by_neighbour).and_return DeckFactoryMock.duel_deck
+    allow_any_instance_of(DeckFactory).to receive(:factories).and_return DeckFactoryMock.duel_deck
 
     players = Game.prepare_players(%w(jean francois michel))
+    neighbours = Game.prepare_neighbours(3, )
     @game = Game.new(players)
     @attacker = @game.current_player
     @defender = @game.players[@game.next_player_index]

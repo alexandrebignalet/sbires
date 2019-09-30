@@ -7,7 +7,7 @@ class Neighbour
     @name = name
     @pawns = []
     @players_in_game = players_in_game
-    @deck = deck_factory.create_deck_for @name
+    @deck = deck_factory.create_deck_for name
     @discard = []
   end
 

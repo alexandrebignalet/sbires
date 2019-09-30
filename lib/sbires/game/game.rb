@@ -10,7 +10,7 @@ class Game
   MIN_PLAYERS_IN_GAME = 2
   MAX_PLAYERS_IN_GAME = 5
 
-  attr_reader :players, :current_player, :neighbours, :state, :play_mediator, :current_day
+  attr_reader :players, :neighbours, :state, :play_mediator, :current_day, :turn_skippers
 
   def self.prepare_players(player_names)
     remaining_lord_names = Game::LORD_NAMES.dup
@@ -20,21 +20,20 @@ class Game
   end
 
   def self.prepare_neighbours(players_count, deck_factory = DeckFactory.new)
-    NEIGHBOURS_NAMES.map {|name| Neighbour.new(name, players_count, deck_factory)}
+    NEIGHBOURS_NAMES.map { |name| Neighbour.new(name, players_count, deck_factory) }
   end
 
   def initialize(players,
                  current_player_index: 0,
                  current_day: 1,
-                 neighbours: Game.prepare_neighbours(players.length),
-                 mediator: CardPlayMediator.new)
+                 neighbours: Game.prepare_neighbours(players.length))
     raise Sbires::Error, "Not enough player to start the game" if players.length < MIN_PLAYERS_IN_GAME
     raise Sbires::Error, "Too much players to start the game" if players.length > MAX_PLAYERS_IN_GAME
 
-    @play_mediator = mediator
+    @play_mediator = CardPlayMediator.new
 
     @players = players
-    @current_player = players[current_player_index]
+    @current_player_index = current_player_index
     @neighbours = neighbours
     @current_day = current_day
     @turn_skippers = []
@@ -44,6 +43,10 @@ class Game
 
   def transition_to(state)
     @state = state
+  end
+
+  def current_player
+    @players[@current_player_index]
   end
 
   ############# PAWN PLACEMENT ###########
@@ -80,7 +83,10 @@ class Game
   ###### DUEL ##########
 
   def end_turn
-    @current_player = find_next_player
+    next_player = players[next_player_index]
+
+    @current_player_index = @turn_skippers.include?(next_player) ? next_player_index + 1 : next_player_index
+
     state.end_turn
   end
 
@@ -89,9 +95,10 @@ class Game
     raise Sbires::Error, "Cannot end of day before play cards phase" unless state.is_a? PlayCards
 
     @turn_skippers << player
-    @current_day += 1 if @turn_skippers.size == players.size
 
     end_turn
+
+    end_day if all_players_skipped?
   end
 
   def neighbours_dominants
@@ -118,8 +125,20 @@ class Game
 
   private
 
-  def find_next_player
-    next_player = players[next_player_index]
-    @turn_skippers.include?(next_player) ? players[next_player_index + 1] : next_player
+  def all_players_skipped?
+    @turn_skippers.size == players.size
+  end
+
+  def end_day
+    return if @current_day == 4
+
+    resat_players = players.map(&:reset)
+    @players = resat_players
+    @current_player_index = next_player_index
+    @current_day = @current_day + 1
+    @neighbours = Game.prepare_neighbours(resat_players.length)
+    @turn_skippers = []
+
+    transition_to PawnPlacement.new(self)
   end
 end

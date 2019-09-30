@@ -1,7 +1,7 @@
 RSpec.describe "Card play phase" do
 
   before do
-    allow_any_instance_of(DeckFactory).to receive(:deck_by_neighbour).and_return(DeckFactoryMock.unique_card_neighbour)
+    allow_any_instance_of(DeckFactory).to receive(:factories).and_return(DeckFactoryMock.unique_card_neighbour)
 
     players = Game.prepare_players(%w(Alex Yoan))
     @game = Game.new(players)

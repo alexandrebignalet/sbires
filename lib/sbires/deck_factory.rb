@@ -1,15 +1,12 @@
 class DeckFactory
-  def initialize
-    @deck_by_neighbour = deck_by_neighbour
-  end
 
   def create_deck_for(neighbour_name)
-    @deck_by_neighbour[neighbour_name]
+    factories[neighbour_name]
   end
 
   private
 
-  def deck_by_neighbour
+  def factories
     {
         NeighbourType::CHATEAU => DeckFactory.create_chateau_cards.shuffle,
         NeighbourType::EGLISE => DeckFactory.create_eglise_cards.shuffle,
