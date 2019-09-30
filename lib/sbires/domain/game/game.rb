@@ -1,4 +1,4 @@
-require 'sbires/neighbour_type'
+require 'sbires/domain/neighbour_type'
 
 class Game
   LORD_NAMES = ["De Sinople", "D'Azure", "De Gueules", "D'Or", "D'Argent"]
@@ -11,6 +11,10 @@ class Game
   MAX_PLAYERS_IN_GAME = 5
 
   attr_reader :players, :neighbours, :state, :play_mediator, :current_day, :turn_skippers
+
+  def self.create_game(players_names)
+    GameCreated.new(players_names)
+  end
 
   def self.prepare_players(player_names)
     remaining_lord_names = Game::LORD_NAMES.dup
