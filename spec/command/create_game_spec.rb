@@ -7,11 +7,11 @@ RSpec.describe CreateGameHandler do
     player_names = %w(Jean Francois)
     command = CreateGame.new(player_names)
 
-    game_id = handler.call(command)
+    game = handler.call(command)
 
-    expect(game_id).to_not be nil
-    created_game = repository.get(game_id)
+    expect(game).to_not be nil
+    created_game = repository.load(game.id)
     expect(created_game).to_not be nil
-    expect(created_game.id).to eq game_id
+    expect(created_game.id).to eq game.id
   end
 end

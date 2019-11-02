@@ -7,15 +7,17 @@ class CreateGame
 end
 
 class CreateGameHandler
-  def initialize(repository)
+  def initialize(repository = Sbires.config.game_repository)
     @repository = repository
   end
 
   def call(command)
-    game = Game.new(command.player_names)
+    players = Game.prepare_players(command.player_names)
+
+    game = Game.new(players)
 
     @repository.add(game)
 
-    game.id
+    game
   end
 end

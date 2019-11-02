@@ -1,6 +1,10 @@
 require 'sbires/version'
+require 'sbires/configuration'
+require 'sbires/configurable'
 
 module Sbires
+  extend Sbires::Configurable
+
   class Error < StandardError; end
 
   require 'sbires/domain/game/game'

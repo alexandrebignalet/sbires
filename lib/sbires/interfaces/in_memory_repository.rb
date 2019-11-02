@@ -3,11 +3,18 @@ class InMemoryRepository
     @by_id = {}
   end
 
-  def get(id)
-    @by_id[id]
+  def load(id)
+    entity = @by_id[id]
+    raise "Entity #{id} not found" if entity.nil?
+
+    entity
   end
 
   def add(entity)
     @by_id[entity.id] = entity
+  end
+
+  def delete(id)
+    @by_id.delete(id)
   end
 end

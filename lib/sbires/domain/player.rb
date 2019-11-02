@@ -22,7 +22,7 @@ class Player
 
   def place_pawn_on(neighbour)
     raise Sbires::Error, "No more pawns to place" if all_pawns_placed?
-    neighbour.receive_pawn_from(pawns.shift)
+    neighbour.receive_pawn_from(pawns)
   end
 
   def all_pawns_placed?

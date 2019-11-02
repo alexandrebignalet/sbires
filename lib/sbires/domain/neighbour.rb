@@ -11,9 +11,9 @@ class Neighbour
     @discard = []
   end
 
-  def receive_pawn_from(pawn)
+  def receive_pawn_from(pawns)
     raise Sbires::Error, "Neighbour #{@name} is full" if full?
-    @pawns << pawn
+    @pawns << pawns.shift
   end
 
   def give_from_discard(card_name)
