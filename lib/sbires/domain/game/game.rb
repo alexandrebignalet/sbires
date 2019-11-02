@@ -1,4 +1,5 @@
-require 'sbires/neighbour_type'
+require 'sbires/domain/neighbour_type'
+require 'securerandom'
 
 class Game
   LORD_NAMES = ["De Sinople", "D'Azure", "De Gueules", "D'Or", "D'Argent"]
@@ -10,7 +11,7 @@ class Game
   MIN_PLAYERS_IN_GAME = 2
   MAX_PLAYERS_IN_GAME = 5
 
-  attr_reader :players, :neighbours, :state, :play_mediator, :current_day, :turn_skippers
+  attr_reader :players, :neighbours, :state, :play_mediator, :current_day, :turn_skippers, :current_player_index, :id
 
   def self.prepare_players(player_names)
     remaining_lord_names = Game::LORD_NAMES.dup
@@ -30,8 +31,8 @@ class Game
     raise Sbires::Error, "Not enough player to start the game" if players.length < MIN_PLAYERS_IN_GAME
     raise Sbires::Error, "Too much players to start the game" if players.length > MAX_PLAYERS_IN_GAME
 
+    @id = SecureRandom.uuid
     @play_mediator = CardPlayMediator.new
-
     @players = players
     @current_player_index = current_player_index
     @neighbours = neighbours

@@ -1,4 +1,4 @@
-class PawnPlacement
+class PawnPlacement < GameState
   def initialize(game)
     @game = game
   end

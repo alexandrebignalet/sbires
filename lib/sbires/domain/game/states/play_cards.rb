@@ -1,4 +1,4 @@
-class PlayCards
+class PlayCards < GameState
   def initialize(game)
     @game = game
   end
