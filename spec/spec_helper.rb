@@ -1,6 +1,7 @@
 require "bundler/setup"
 require "sbires"
 require_relative './mocks/deck_factory_mock'
+require_relative './sbires_helper'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

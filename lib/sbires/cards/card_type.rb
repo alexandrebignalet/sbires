@@ -44,4 +44,10 @@ class CardType
   BAGARRE_GENERALE = "Bagarre générale"
   PATRONNE = "Patronne"
   INFLUENCE = "Influence"
+
+  def self.demonstration_cards
+    [CardType::DEMONSTRATION_MENESTREL,
+     CardType::DEMONSTRATION_AMUSEUR,
+     CardType::DEMONSTRATION_FABULISTE]
+  end
 end

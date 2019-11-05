@@ -20,6 +20,11 @@ class Player
     @spare = spare
   end
 
+  def three_demonstration_in_spare?
+    demonstrations_in_spare = spare.select { |c| CardType.demonstration_cards.include? c.name }
+    demonstrations_in_spare.length == 3
+  end
+
   def place_pawn_on(neighbour)
     raise Sbires::Error, "No more pawns to place" if all_pawns_placed?
     neighbour.receive_pawn_from(pawns)

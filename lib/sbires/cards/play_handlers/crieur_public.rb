@@ -9,10 +9,9 @@ module PlayHandlers
       current_player.discard_in(play.card, grand_place)
 
       play.game.neighbours_dominants.each do |neighbour_dominant|
-        dominant = neighbour_dominant.first
+        dominant, neighbour = neighbour_dominant
         next if dominant.nil? || dominant != current_player.lord_name
 
-        neighbour = neighbour_dominant.last
         current_player.pick_top_card_of_deck neighbour
       end
 
