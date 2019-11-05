@@ -30,10 +30,11 @@ RSpec.describe "End of day" do
 
     it "should not allow skippers to play again during the day" do
       @game.end_day_for @first_player
+      @game.end_day_for @second_player
 
-      @game.draw_card(@second_player.lord_name, CardType::PRIERE)
+      @game.draw_card(@third_player.lord_name, CardType::PRIERE)
 
-      expect(@game.current_player).to eq @second_player
+      expect(@game.current_player.name).to eq @third_player.name
     end
 
     context 'transition to the next day' do
@@ -68,7 +69,7 @@ RSpec.describe "End of day" do
       end
 
       it "should reset turn skippers" do
-        expect(@game.turn_skippers.empty?).to be true
+        expect(@game.day_skippers.empty?).to be true
       end
     end
   end

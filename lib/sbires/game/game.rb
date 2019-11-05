@@ -1,4 +1,4 @@
-require 'sbires/domain/neighbour_type'
+require 'sbires/neighbour_type'
 require 'securerandom'
 
 class Game
@@ -11,7 +11,7 @@ class Game
   MIN_PLAYERS_IN_GAME = 2
   MAX_PLAYERS_IN_GAME = 5
 
-  attr_reader :players, :neighbours, :state, :play_mediator, :current_day, :turn_skippers, :current_player_index, :id
+  attr_reader :players, :neighbours, :state, :play_mediator, :current_day, :day_skippers, :current_player_index, :id
 
   def self.prepare_players(player_names)
     remaining_lord_names = Game::LORD_NAMES.dup
@@ -27,17 +27,19 @@ class Game
   def initialize(players,
                  current_player_index: 0,
                  current_day: 1,
-                 neighbours: Game.prepare_neighbours(players.length))
+                 neighbours: Game.prepare_neighbours(players.length),
+                 id: nil)
     raise Sbires::Error, "Not enough player to start the game" if players.length < MIN_PLAYERS_IN_GAME
     raise Sbires::Error, "Too much players to start the game" if players.length > MAX_PLAYERS_IN_GAME
 
-    @id = SecureRandom.uuid
+    @id = id || SecureRandom.uuid
     @play_mediator = CardPlayMediator.new
     @players = players
+    @first_player_to_play_idx = current_player_index
     @current_player_index = current_player_index
     @neighbours = neighbours
     @current_day = current_day
-    @turn_skippers = []
+    @day_skippers = []
 
     transition_to PawnPlacement.new(self)
   end
@@ -84,9 +86,7 @@ class Game
   ###### DUEL ##########
 
   def end_turn
-    next_player = players[next_player_index]
-
-    @current_player_index = @turn_skippers.include?(next_player) ? next_player_index + 1 : next_player_index
+    @current_player_index = next_player_index
 
     state.end_turn
   end
@@ -95,9 +95,9 @@ class Game
     raise Sbires::Error, "Not your turn" unless current_player == player
     raise Sbires::Error, "Cannot end of day before play cards phase" unless state.is_a? PlayCards
 
-    @turn_skippers << player
-
     end_turn
+
+    @day_skippers << player.lord_name
 
     end_day if all_players_skipped?
   end
@@ -119,15 +119,23 @@ class Game
   end
 
   def next_player_index
-    index_of_current_player = players.index { |p| p.lord_name == current_player.lord_name }
+    next_p = nil
+    cpi = players.index { |p| p.lord_name == current_player.lord_name }
+    npi = cpi == players.length - 1 ? 0 : cpi + 1
 
-    index_of_current_player == players.length - 1 ? 0 : index_of_current_player + 1
+    while next_p.nil? do
+      player = players[npi]
+      next_p = npi unless @day_skippers.include?(player.lord_name)
+      npi = npi < players.length - 1 ? npi + 1 : 0
+    end
+
+    next_p
   end
 
   private
 
   def all_players_skipped?
-    @turn_skippers.size == players.size
+    @day_skippers.size == players.size
   end
 
   def end_day
@@ -135,10 +143,11 @@ class Game
 
     resat_players = players.map(&:reset)
     @players = resat_players
-    @current_player_index = next_player_index
+    @first_player_to_play_idx = @first_player_to_play_idx == players.length - 1 ? 0 : @first_player_to_play_idx + 1
+    @current_player_index = @first_player_to_play_idx
     @current_day = @current_day + 1
     @neighbours = Game.prepare_neighbours(resat_players.length)
-    @turn_skippers = []
+    @day_skippers = []
 
     transition_to PawnPlacement.new(self)
   end

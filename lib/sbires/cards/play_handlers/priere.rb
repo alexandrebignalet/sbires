@@ -18,6 +18,7 @@ module PlayHandlers
         attacker_plays? ? @game_state.reroll_attack_dice(rerolled_dice) : @game_state.reroll_defense_dice(rerolled_dice)
       else
         @player.spare_card @card
+        play.game.end_turn
       end
     end
 
