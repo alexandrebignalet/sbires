@@ -6,9 +6,7 @@ RSpec.describe "End of game" do
     @first_player = @game.current_player
     @second_player = @game.players[@game.next_player_index]
   end
-
-
-
+  
   it "should end the game after day four" do
     pawn_placement(@first_player, @second_player)
 

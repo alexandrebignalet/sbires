@@ -17,7 +17,6 @@ RSpec.describe "Priere cards played" do
   context "outside a duel" do
     before do
       @game.draw_card(@first_player.lord_name, CardType::PRIERE)
-      @game.end_turn
     end
 
     it "should add the card in current player spare" do
@@ -26,6 +25,10 @@ RSpec.describe "Priere cards played" do
 
     it "should raise if player spare is full" do
       expect { @game.draw_card(@second_player.lord_name, CardType::PRIERE) }.to raise_error Sbires::Error
+    end
+
+    it 'should end the current player turn' do
+      expect(@game.current_player.lord_name).to_not eq(@first_player.lord_name)
     end
   end
 
