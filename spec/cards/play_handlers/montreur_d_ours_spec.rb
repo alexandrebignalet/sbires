@@ -51,7 +51,7 @@ RSpec.describe PlayHandlers::MontreurDours do
                              target_player: @second_player.lord_name) }.to raise_error Sbires::Error
   end
 
-  describe "play is correctly done" do
+  describe "when play is correct" do
     let(:chateau_neighbour) { @game.find_neighbour(NeighbourType::CHATEAU) }
 
     before do
