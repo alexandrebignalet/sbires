@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 require "bundler/setup"
 require "sbires"
 require_relative './mocks/deck_factory_mock'
