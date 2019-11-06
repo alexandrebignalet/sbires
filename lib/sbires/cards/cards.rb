@@ -10,6 +10,7 @@ module Cards
     require 'sbires/cards/play_handlers/gant'
     require 'sbires/cards/play_handlers/priere'
     require 'sbires/cards/play_handlers/equipment'
+    require 'sbires/cards/play_handlers/montreur_dours'
   end
 
   module Middlewares
