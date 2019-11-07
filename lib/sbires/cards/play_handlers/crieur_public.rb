@@ -10,7 +10,7 @@ module PlayHandlers
 
       play.game.neighbours_dominants.each do |neighbour_dominant|
         dominant, neighbour = neighbour_dominant
-        next if dominant.nil? || dominant != current_player.lord_name
+        next if dominant != current_player.lord_name
 
         current_player.pick_top_card_of_deck neighbour
       end

@@ -103,7 +103,9 @@ class Game
   end
 
   def neighbours_dominants
-    neighbours.map { |neighbour| [neighbour.dominant, neighbour]}
+    neighbours
+        .select { |neighbour| neighbour.dominant }
+        .map { |neighbour| [neighbour.dominant, neighbour]}
   end
 
   def find_player(lord_name)
