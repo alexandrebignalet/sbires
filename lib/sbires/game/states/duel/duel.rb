@@ -35,20 +35,16 @@ class Duel < PlayCards
   end
 
   def re_roll(player, target_dice)
-    is_defender = @defender.is_player?(player)
-
-    duelist = is_defender ? @defender : @attacker
+    duelist = duelist(player)
 
     duelist.re_roll(target_dice)
   end
 
   def equip(player, card)
-    raise Sbires::Error, "Only duelists can equip" unless duelist? player
     is_defender = @defender.is_player?(player)
     raise Sbires::Error, "Defender cannot equip after attacker rolled" if @attacker.rolled? && is_defender
 
-    duelist = is_defender ? @defender : @attacker
-    duelist.equip(card)
+    duelist(player).equip(card)
   end
 
   def duelist?(player)
@@ -56,6 +52,11 @@ class Duel < PlayCards
   end
 
   private
+
+  def duelist(player)
+    is_defender = @defender.is_player?(player)
+    is_defender ? @defender : @attacker
+  end
 
   def change_points
     if @attacker == result[:winner]

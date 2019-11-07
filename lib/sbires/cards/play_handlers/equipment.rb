@@ -5,6 +5,7 @@ module PlayHandlers
       player = play.submitter
       card = play.card
       raise Sbires::Error, "Not in duel" unless game_state.is_a? Duel
+      raise Sbires::Error, "Only duelists can equip" unless game_state.duelist? player
 
       game_state.equip(player, card)
 
