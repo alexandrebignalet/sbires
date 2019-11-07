@@ -18,33 +18,15 @@ class DeckFactory
 
   def self.create_chateau_cards
     [
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_MENESTREL),
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_MENESTREL),
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_MENESTREL),
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_MENESTREL),
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_MENESTREL),
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_MENESTREL),
+        *(0...6).map { Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_MENESTREL) },
 
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_FABULISTE),
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_FABULISTE),
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_FABULISTE),
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_FABULISTE),
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_FABULISTE),
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_FABULISTE),
+        *(0...6).map { Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_FABULISTE) },
 
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_AMUSEUR),
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_AMUSEUR),
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_AMUSEUR),
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_AMUSEUR),
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_AMUSEUR),
-        Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_AMUSEUR),
+        *(0...6).map { Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_AMUSEUR) },
 
-        Card.new(NeighbourType::CHATEAU, CardType::MONTREUR_DOURS),
-        Card.new(NeighbourType::CHATEAU, CardType::MONTREUR_DOURS),
-        Card.new(NeighbourType::CHATEAU, CardType::MONTREUR_DOURS),
+        *(0...3).map { Card.new(NeighbourType::CHATEAU, CardType::MONTREUR_DOURS) },
 
-        Card.new(NeighbourType::CHATEAU, CardType::GARDE),
-        Card.new(NeighbourType::CHATEAU, CardType::GARDE),
+        *(0...2).map { Card.new(NeighbourType::CHATEAU, CardType::GARDE) },
 
         Card.new(NeighbourType::CHATEAU, CardType::INTRIGUE),
 
@@ -56,33 +38,15 @@ class DeckFactory
 
   def self.create_eglise_cards
     [
-        Card.new(NeighbourType::EGLISE, CardType::PRIERE, buff: true),
-        Card.new(NeighbourType::EGLISE, CardType::PRIERE, buff: true),
-        Card.new(NeighbourType::EGLISE, CardType::PRIERE, buff: true),
-        Card.new(NeighbourType::EGLISE, CardType::PRIERE, buff: true),
-        Card.new(NeighbourType::EGLISE, CardType::PRIERE, buff: true),
+        *(0...5).map { Card.new(NeighbourType::EGLISE, CardType::PRIERE, buff: true) },
 
-        Card.new(NeighbourType::EGLISE, CardType::EAU_BENITE),
-        Card.new(NeighbourType::EGLISE, CardType::EAU_BENITE),
-        Card.new(NeighbourType::EGLISE, CardType::EAU_BENITE),
-        Card.new(NeighbourType::EGLISE, CardType::EAU_BENITE),
-        Card.new(NeighbourType::EGLISE, CardType::EAU_BENITE),
+        *(0...5).map { Card.new(NeighbourType::EGLISE, CardType::EAU_BENITE) },
 
-        Card.new(NeighbourType::EGLISE, CardType::ENFANTS_DE_CHOEUR),
-        Card.new(NeighbourType::EGLISE, CardType::ENFANTS_DE_CHOEUR),
-        Card.new(NeighbourType::EGLISE, CardType::ENFANTS_DE_CHOEUR),
-        Card.new(NeighbourType::EGLISE, CardType::ENFANTS_DE_CHOEUR),
-        Card.new(NeighbourType::EGLISE, CardType::ENFANTS_DE_CHOEUR),
+        *(0...5).map { Card.new(NeighbourType::EGLISE, CardType::ENFANTS_DE_CHOEUR) },
 
-        Card.new(NeighbourType::EGLISE, CardType::FOSSOYEUR),
-        Card.new(NeighbourType::EGLISE, CardType::FOSSOYEUR),
-        Card.new(NeighbourType::EGLISE, CardType::FOSSOYEUR),
-        Card.new(NeighbourType::EGLISE, CardType::FOSSOYEUR),
+        *(0...4).map { Card.new(NeighbourType::EGLISE, CardType::FOSSOYEUR) },
 
-        Card.new(NeighbourType::EGLISE, CardType::PENITENT),
-        Card.new(NeighbourType::EGLISE, CardType::PENITENT),
-        Card.new(NeighbourType::EGLISE, CardType::PENITENT),
-        Card.new(NeighbourType::EGLISE, CardType::PENITENT),
+        *(0...4).map { Card.new(NeighbourType::EGLISE, CardType::PENITENT) },
 
         Card.new(NeighbourType::EGLISE, CardType::INQUISITION),
 
@@ -94,35 +58,17 @@ class DeckFactory
 
   def self.create_grand_place_cards
     [
-        Card.new(NeighbourType::GRAND_PLACE, CardType::GANT),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::GANT),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::GANT),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::GANT),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::GANT),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::GANT),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::GANT),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::GANT),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::GANT),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::GANT),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::GANT),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::GANT),
+        *(0...12).map { Card.new(NeighbourType::GRAND_PLACE, CardType::GANT) },
 
-        Card.new(NeighbourType::GRAND_PLACE, CardType::CONCIERGE),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::CONCIERGE),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::CONCIERGE),
+        *(0...3).map { Card.new(NeighbourType::GRAND_PLACE, CardType::CONCIERGE) },
 
-        Card.new(NeighbourType::GRAND_PLACE, CardType::CRIEUR_PUBLIC),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::CRIEUR_PUBLIC),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::CRIEUR_PUBLIC),
+        *(0...3).map { Card.new(NeighbourType::GRAND_PLACE, CardType::CRIEUR_PUBLIC) },
 
-        Card.new(NeighbourType::GRAND_PLACE, CardType::FOUINEUR),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::FOUINEUR),
+        *(0...2).map { Card.new(NeighbourType::GRAND_PLACE, CardType::FOUINEUR) },
 
-        Card.new(NeighbourType::GRAND_PLACE, CardType::APOTHICAIRE),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::APOTHICAIRE),
+        *(0...2).map { Card.new(NeighbourType::GRAND_PLACE, CardType::APOTHICAIRE) },
 
-        Card.new(NeighbourType::GRAND_PLACE, CardType::PILORI),
-        Card.new(NeighbourType::GRAND_PLACE, CardType::PILORI),
+        *(0...2).map { Card.new(NeighbourType::GRAND_PLACE, CardType::PILORI) },
 
         Card.new(NeighbourType::GRAND_PLACE, CardType::VIEILLE_DAME),
 
@@ -132,34 +78,17 @@ class DeckFactory
 
   def self.create_salle_d_armes_cards
     [
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE, min_touch: 5, min_block: 5),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE, min_touch: 5, min_block: 5),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE, min_touch: 5, min_block: 5),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE, min_touch: 5, min_block: 5),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE, min_touch: 5, min_block: 5),
+        *(0...5).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE, min_touch: 5, min_block: 5) },
 
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::GOURDIN, min_touch: 4, min_block: 5),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::GOURDIN, min_touch: 4, min_block: 5),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::GOURDIN, min_touch: 4, min_block: 5),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::GOURDIN, min_touch: 4, min_block: 5),
+        *(0...4).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::GOURDIN, min_touch: 4, min_block: 5) },
 
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::HACHE, min_touch: 3, min_block: 5),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::HACHE, min_touch: 3, min_block: 5),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::HACHE, min_touch: 3, min_block: 5),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::HACHE, min_touch: 3, min_block: 5),
+        *(0...4).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::HACHE, min_touch: 3, min_block: 5) },
 
         Card.new(NeighbourType::SALLE_D_ARMES, CardType::EPEE, min_touch: 2, min_block: 4),
 
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES, min_touch: 5, min_block: 4),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES, min_touch: 5, min_block: 4),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES, min_touch: 5, min_block: 4),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES, min_touch: 5, min_block: 4),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES, min_touch: 5, min_block: 4),
+        *(0...5).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES, min_touch: 5, min_block: 4) },
 
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::ECU_DE_FER, min_touch: 5, min_block: 3),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::ECU_DE_FER, min_touch: 5, min_block: 3),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::ECU_DE_FER, min_touch: 5, min_block: 3),
-        Card.new(NeighbourType::SALLE_D_ARMES, CardType::ECU_DE_FER, min_touch: 5, min_block: 3),
+        *(0...4).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::ECU_DE_FER, min_touch: 5, min_block: 3) },
 
         Card.new(NeighbourType::SALLE_D_ARMES, CardType::ARMURE_COMPLETE, min_touch: 4, min_block: 2),
 
@@ -171,33 +100,15 @@ class DeckFactory
 
   def self.create_taverne_cards
     [
-        Card.new(NeighbourType::TAVERNE, CardType::RAGOTS_ET_FORFANTERIES),
-        Card.new(NeighbourType::TAVERNE, CardType::RAGOTS_ET_FORFANTERIES),
-        Card.new(NeighbourType::TAVERNE, CardType::RAGOTS_ET_FORFANTERIES),
-        Card.new(NeighbourType::TAVERNE, CardType::RAGOTS_ET_FORFANTERIES),
-        Card.new(NeighbourType::TAVERNE, CardType::RAGOTS_ET_FORFANTERIES),
-        Card.new(NeighbourType::TAVERNE, CardType::RAGOTS_ET_FORFANTERIES),
-        Card.new(NeighbourType::TAVERNE, CardType::RAGOTS_ET_FORFANTERIES),
-        Card.new(NeighbourType::TAVERNE, CardType::RAGOTS_ET_FORFANTERIES),
+        *(0...8).map { Card.new(NeighbourType::TAVERNE, CardType::RAGOTS_ET_FORFANTERIES) },
 
-        Card.new(NeighbourType::TAVERNE, CardType::PASSE_PASSE),
-        Card.new(NeighbourType::TAVERNE, CardType::PASSE_PASSE),
-        Card.new(NeighbourType::TAVERNE, CardType::PASSE_PASSE),
-        Card.new(NeighbourType::TAVERNE, CardType::PASSE_PASSE),
+        *(0...4).map { Card.new(NeighbourType::TAVERNE, CardType::PASSE_PASSE) },
 
-        Card.new(NeighbourType::TAVERNE, CardType::IVROGNE),
-        Card.new(NeighbourType::TAVERNE, CardType::IVROGNE),
-        Card.new(NeighbourType::TAVERNE, CardType::IVROGNE),
-        Card.new(NeighbourType::TAVERNE, CardType::IVROGNE),
+        *(0...4).map { Card.new(NeighbourType::TAVERNE, CardType::IVROGNE) },
 
-        Card.new(NeighbourType::TAVERNE, CardType::RACINE_DE_BELLADONE),
-        Card.new(NeighbourType::TAVERNE, CardType::RACINE_DE_BELLADONE),
-        Card.new(NeighbourType::TAVERNE, CardType::RACINE_DE_BELLADONE),
-        Card.new(NeighbourType::TAVERNE, CardType::RACINE_DE_BELLADONE),
+        *(0...4).map { Card.new(NeighbourType::TAVERNE, CardType::RACINE_DE_BELLADONE) },
 
-        Card.new(NeighbourType::TAVERNE, CardType::FELON),
-        Card.new(NeighbourType::TAVERNE, CardType::FELON),
-        Card.new(NeighbourType::TAVERNE, CardType::FELON),
+        *(0...3).map { Card.new(NeighbourType::TAVERNE, CardType::FELON) },
 
         Card.new(NeighbourType::TAVERNE, CardType::BAGARRE_GENERALE),
 
