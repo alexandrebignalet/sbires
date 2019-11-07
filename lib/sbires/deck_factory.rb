@@ -18,15 +18,15 @@ class DeckFactory
 
   def self.create_chateau_cards
     [
-        *(0...6).map { Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_MENESTREL) },
+        *create_cards(6) { Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_MENESTREL) },
 
-        *(0...6).map { Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_FABULISTE) },
+        *create_cards(6) { Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_FABULISTE) },
 
-        *(0...6).map { Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_AMUSEUR) },
+        *create_cards(6) { Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_AMUSEUR) },
 
-        *(0...3).map { Card.new(NeighbourType::CHATEAU, CardType::MONTREUR_DOURS) },
+        *create_cards(3) { Card.new(NeighbourType::CHATEAU, CardType::MONTREUR_DOURS) },
 
-        *(0...2).map { Card.new(NeighbourType::CHATEAU, CardType::GARDE) },
+        *create_cards(2) { Card.new(NeighbourType::CHATEAU, CardType::GARDE) },
 
         Card.new(NeighbourType::CHATEAU, CardType::INTRIGUE),
 
@@ -38,15 +38,15 @@ class DeckFactory
 
   def self.create_eglise_cards
     [
-        *(0...5).map { Card.new(NeighbourType::EGLISE, CardType::PRIERE, buff: true) },
+        *create_cards(5) { Card.new(NeighbourType::EGLISE, CardType::PRIERE, buff: true) },
 
-        *(0...5).map { Card.new(NeighbourType::EGLISE, CardType::EAU_BENITE) },
+        *create_cards(5) { Card.new(NeighbourType::EGLISE, CardType::EAU_BENITE) },
 
-        *(0...5).map { Card.new(NeighbourType::EGLISE, CardType::ENFANTS_DE_CHOEUR) },
+        *create_cards(5) { Card.new(NeighbourType::EGLISE, CardType::ENFANTS_DE_CHOEUR) },
 
-        *(0...4).map { Card.new(NeighbourType::EGLISE, CardType::FOSSOYEUR) },
+        *create_cards(4) { Card.new(NeighbourType::EGLISE, CardType::FOSSOYEUR) },
 
-        *(0...4).map { Card.new(NeighbourType::EGLISE, CardType::PENITENT) },
+        *create_cards(4) { Card.new(NeighbourType::EGLISE, CardType::PENITENT) },
 
         Card.new(NeighbourType::EGLISE, CardType::INQUISITION),
 
@@ -58,17 +58,17 @@ class DeckFactory
 
   def self.create_grand_place_cards
     [
-        *(0...12).map { Card.new(NeighbourType::GRAND_PLACE, CardType::GANT) },
+        *create_cards(12) { Card.new(NeighbourType::GRAND_PLACE, CardType::GANT) },
 
-        *(0...3).map { Card.new(NeighbourType::GRAND_PLACE, CardType::CONCIERGE) },
+        *create_cards(3) { Card.new(NeighbourType::GRAND_PLACE, CardType::CONCIERGE) },
 
-        *(0...3).map { Card.new(NeighbourType::GRAND_PLACE, CardType::CRIEUR_PUBLIC) },
+        *create_cards(3) { Card.new(NeighbourType::GRAND_PLACE, CardType::CRIEUR_PUBLIC) },
 
-        *(0...2).map { Card.new(NeighbourType::GRAND_PLACE, CardType::FOUINEUR) },
+        *create_cards(2) { Card.new(NeighbourType::GRAND_PLACE, CardType::FOUINEUR) },
 
-        *(0...2).map { Card.new(NeighbourType::GRAND_PLACE, CardType::APOTHICAIRE) },
+        *create_cards(2) { Card.new(NeighbourType::GRAND_PLACE, CardType::APOTHICAIRE) },
 
-        *(0...2).map { Card.new(NeighbourType::GRAND_PLACE, CardType::PILORI) },
+        *create_cards(2) { Card.new(NeighbourType::GRAND_PLACE, CardType::PILORI) },
 
         Card.new(NeighbourType::GRAND_PLACE, CardType::VIEILLE_DAME),
 
@@ -76,19 +76,23 @@ class DeckFactory
     ]
   end
 
+  def self.create_cards(times, &block)
+    (0...times).map { block.call }
+  end
+
   def self.create_salle_d_armes_cards
     [
-        *(0...5).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE, min_touch: 5, min_block: 5) },
+        *create_cards(5) { Card.new(NeighbourType::SALLE_D_ARMES, CardType::DAGUE, min_touch: 5, min_block: 5) },
 
-        *(0...4).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::GOURDIN, min_touch: 4, min_block: 5) },
+        *create_cards(4) { Card.new(NeighbourType::SALLE_D_ARMES, CardType::GOURDIN, min_touch: 4, min_block: 5) },
 
-        *(0...4).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::HACHE, min_touch: 3, min_block: 5) },
+        *create_cards(4) { Card.new(NeighbourType::SALLE_D_ARMES, CardType::HACHE, min_touch: 3, min_block: 5) },
 
         Card.new(NeighbourType::SALLE_D_ARMES, CardType::EPEE, min_touch: 2, min_block: 4),
 
-        *(0...5).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES, min_touch: 5, min_block: 4) },
+        *create_cards(5) { Card.new(NeighbourType::SALLE_D_ARMES, CardType::COTTE_DE_MAILLES, min_touch: 5, min_block: 4) },
 
-        *(0...4).map { Card.new(NeighbourType::SALLE_D_ARMES, CardType::ECU_DE_FER, min_touch: 5, min_block: 3) },
+        *create_cards(4) { Card.new(NeighbourType::SALLE_D_ARMES, CardType::ECU_DE_FER, min_touch: 5, min_block: 3) },
 
         Card.new(NeighbourType::SALLE_D_ARMES, CardType::ARMURE_COMPLETE, min_touch: 4, min_block: 2),
 
@@ -100,15 +104,15 @@ class DeckFactory
 
   def self.create_taverne_cards
     [
-        *(0...8).map { Card.new(NeighbourType::TAVERNE, CardType::RAGOTS_ET_FORFANTERIES) },
+        *create_cards(8) { Card.new(NeighbourType::TAVERNE, CardType::RAGOTS_ET_FORFANTERIES) },
 
-        *(0...4).map { Card.new(NeighbourType::TAVERNE, CardType::PASSE_PASSE) },
+        *create_cards(4) { Card.new(NeighbourType::TAVERNE, CardType::PASSE_PASSE) },
 
-        *(0...4).map { Card.new(NeighbourType::TAVERNE, CardType::IVROGNE) },
+        *create_cards(4) { Card.new(NeighbourType::TAVERNE, CardType::IVROGNE) },
 
-        *(0...4).map { Card.new(NeighbourType::TAVERNE, CardType::RACINE_DE_BELLADONE) },
+        *create_cards(4) { Card.new(NeighbourType::TAVERNE, CardType::RACINE_DE_BELLADONE) },
 
-        *(0...3).map { Card.new(NeighbourType::TAVERNE, CardType::FELON) },
+        *create_cards(3) { Card.new(NeighbourType::TAVERNE, CardType::FELON) },
 
         Card.new(NeighbourType::TAVERNE, CardType::BAGARRE_GENERALE),
 
