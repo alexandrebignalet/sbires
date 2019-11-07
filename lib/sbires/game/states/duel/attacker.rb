@@ -18,17 +18,7 @@ class Attacker < Duelist
   end
 
   def touches
-    count_touches @dice_rolls
-  end
-
-  def count_touches(dice_result)
-    success_range = ->() { (@equipment.min_touch...MAX_DICE_ROLL) }
-
-    touches = dice_result.select do |roll|
-      @equipment ? success_range.call.include?(roll) : roll == MAX_DICE_ROLL
-    end
-
-    touches.length
+    dice_result(@equipment&.min_touch)
   end
 
   def loose

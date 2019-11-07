@@ -14,6 +14,16 @@ class Duelist
     @dice_rolls = @dice_roller.roll(dice_number)
   end
 
+  def dice_result(min_success_value)
+    success_range = ->() { (min_success_value...MAX_DICE_ROLL) }
+
+    successes = @dice_rolls.select do |roll|
+      @equipment ? success_range.call.include?(roll) : roll == MAX_DICE_ROLL
+    end
+
+    successes.length
+  end
+
   def rolled?
     @dice_rolls.length > 0
   end

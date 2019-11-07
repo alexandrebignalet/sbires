@@ -6,17 +6,7 @@ class Defender < Duelist
   end
 
   def blocks
-    count_blocks @dice_rolls
-  end
-
-  def count_blocks(dice_result)
-    success_range = ->() { (@equipment.min_block...MAX_DICE_ROLL) }
-
-    blocks = dice_result.select do |roll|
-      @equipment ? success_range.call.include?(roll) : roll == MAX_DICE_ROLL
-    end
-
-    blocks.length
+    dice_result(@equipment&.min_block)
   end
 
   def loose(touches_count)
