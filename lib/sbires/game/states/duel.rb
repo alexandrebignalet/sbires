@@ -20,7 +20,7 @@ class Duel < PlayCards
   end
 
   def roll_dice(lord_name)
-    attacker_turn? ? roll_attacker_dices(lord_name) : roll_defender_dices(lord_name)
+    attack_not_done? ? roll_attacker_dices(lord_name) : roll_defender_dices(lord_name)
   end
 
   def end_turn
@@ -143,9 +143,5 @@ class Duel < PlayCards
 
   def attack_missed?
     @attack_roll.length > 0 && attacks_number == MIN_TOUCH_NUMBER
-  end
-
-  def attacker_turn?
-    attack_not_done?
   end
 end
