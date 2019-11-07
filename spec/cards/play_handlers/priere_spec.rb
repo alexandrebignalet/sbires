@@ -76,7 +76,7 @@ RSpec.describe "Priere cards played" do
 
       result = @game.end_turn
 
-      expect(result[:winner]).to eq @first_player
+      expect(result[:winner].is_player?(@first_player)).to be true
     end
 
     it "should allow defender to reroll a dice" do
@@ -90,7 +90,7 @@ RSpec.describe "Priere cards played" do
       @game.draw_card(@second_player.lord_name, CardType::PRIERE, reroll_dice: 1)
 
       result = @game.end_turn
-      expect(result[:winner]).to eq @second_player
+      expect(result[:winner].is_player?(@second_player)).to be true
     end
 
     # what if priere for defender after attacker roll ?

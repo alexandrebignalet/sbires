@@ -1,9 +1,6 @@
 class Player
   PAWN_PER_PLAYER = 8
   INITIAL_POINT_NUMBER = 5
-  ATTACK_SUCCEED_POINTS = 5
-  DEFENSE_SUCCESS_POINTS = 2
-  ATTACK_FAILED_POINTS = -1
   SPARE_MAX_CAPACITY = 8
 
   attr_reader :name, :lord_name, :pawns, :points, :cards, :spare
@@ -68,12 +65,8 @@ class Player
     @spare.length == SPARE_MAX_CAPACITY
   end
 
-  def won_duel(points = nil)
-    @points += points.nil? ? ATTACK_SUCCEED_POINTS : points
-  end
-
-  def lost_duel(points = nil)
-    @points += points.nil? ? ATTACK_FAILED_POINTS : points
+  def change_points(points)
+    @points += points
   end
 
   def find_card(card_name)
