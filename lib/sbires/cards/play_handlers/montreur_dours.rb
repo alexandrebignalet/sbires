@@ -7,7 +7,7 @@ module PlayHandlers
       raise Sbires::Error, "#{self.class.name}: You must target an opponent" if target_player == game.current_player
       raise Sbires::Error, "#{self.class.name}: You can only target Demonstrations card" unless CardType.demonstration_cards.include?(target_card_type)
 
-      game.transition_to ParryableAttackState.new(@game, target_player)
+      game.transition_to ParryableAttackState.new(@game, target_player, play.card)
 
       target_card = target_player.find_card_in_spare(target_card_type)
       target_neighbour = game.find_neighbour(target_card.neighbour_name)

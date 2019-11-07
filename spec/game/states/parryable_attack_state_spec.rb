@@ -9,7 +9,7 @@ RSpec.describe ParryableAttackState do
 
     before do
       @second_player.spare << Card.new(NeighbourType::CHATEAU, target_card_type)
-      @first_player.cards << Card.new(NeighbourType::CHATEAU, played_card)
+      @first_player.cards << Card.new(NeighbourType::CHATEAU, played_card, parried_by: [])
 
       @game.draw_card(@first_player.lord_name,
                       played_card,
@@ -22,11 +22,11 @@ RSpec.describe ParryableAttackState do
     end
 
     it "should have a target player" do
-      expect(@game.target_player).to eq(@second_player)
+      expect(@game.state.target_player).to eq(@second_player)
     end
 
     it "should have a attack card" do
-      expect(@game.attack_card).to eq(target_card_type)
+      expect(@game.state.attack_card.name).to eq(played_card)
     end
 
     it "should raise if any player draws a card" do
@@ -64,6 +64,8 @@ RSpec.describe ParryableAttackState do
           @game.discard_spare_card(@second_player.lord_name, CardType::PENITENT)
         }.to raise_error Sbires::Error
       end
+
+      # TODO it should also be parried by
     end
   end
 end

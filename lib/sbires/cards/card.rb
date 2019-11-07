@@ -14,4 +14,8 @@ class Card
   def buff?
     !!@buff
   end
+
+  def is_parried_by?(card_name)
+    @parried_by.include?(card_name)
+  end
 end

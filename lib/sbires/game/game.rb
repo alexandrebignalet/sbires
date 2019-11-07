@@ -55,10 +55,6 @@ class Game
     @players[@current_player_index]
   end
 
-  def target_player
-    state.target_player
-  end
-
   ############# PAWN PLACEMENT ###########
   def place_pawn(lord_name, neighbour_name)
     state.place_pawn(lord_name, neighbour_name)
@@ -139,6 +135,12 @@ class Game
     end
 
     next_p
+  end
+
+  def tap_card(lord_name, card_name)
+    player = find_player lord_name
+    raise Sbires::Error, "Not your turn" unless current_player == player
+    card = player.find_card_in_spare card_name
   end
 
   private

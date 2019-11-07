@@ -13,6 +13,6 @@ class ParryableAttackState < PlayCards
   def discard_spare_card(lord_name, card_name)
     raise Sbires::Error, "#{self.class.name}: You are not targetted by the attack" if target_player.lord_name != lord_name
     card = target_player.find_card_in_spare card_name
-
+    raise Sbires::Error, "#{self.class.name}: #{card_name} do not protect against #{attack_card.name}" unless @attack_card.is_parried_by? card_name
   end
 end
