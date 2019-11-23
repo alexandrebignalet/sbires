@@ -3,13 +3,24 @@ RSpec.describe ParryableAttackState do
   before do
     start_two_players_game(DeckFactoryMock.random_deck)
   end
+
+  it "should raise if 'do not protect' outside a parryable attack state" do
+    expect { @game.do_not_protect(@first_player.lord_name) }.to raise_error Sbires::Error
+  end
+
   describe "when a parryable card is played" do
     let(:played_card) { CardType::MONTREUR_DOURS }
     let(:target_card_type) { CardType::DEMONSTRATION_AMUSEUR }
 
     before do
+      @second_player.cards << Card.new(NeighbourType::GRAND_PLACE, CardType::VAILLANCE, used: false)
+
       @second_player.spare << Card.new(NeighbourType::CHATEAU, target_card_type)
+      @first_player.cards << Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_FABULISTE)
       @first_player.cards << Card.new(NeighbourType::CHATEAU, played_card, parried_by: [])
+
+      @game.draw_card(@first_player.lord_name, CardType::DEMONSTRATION_FABULISTE)
+      @game.draw_card(@second_player.lord_name, CardType::VAILLANCE)
 
       @game.draw_card(@first_player.lord_name,
                       played_card,
@@ -41,6 +52,38 @@ RSpec.describe ParryableAttackState do
                                target_player: @second_player.lord_name) }.to raise_error Sbires::Error
     end
 
+    it "should raise if any player other than targeted 'do not protect'" do
+      expect { @game.do_not_protect(@first_player.lord_name) }.to raise_error Sbires::Error
+    end
+
+    context "when the target do not protect" do
+      before do
+        @game.do_not_protect(@second_player.lord_name)
+      end
+
+      it "should apply the effect" do
+        expect(@second_player.spare.map(&:name)).to_not include target_card_type
+      end
+
+      it "go back to play cards state" do
+        expect(@game.state).to be_instance_of PlayCards
+      end
+    end
+
+    describe "when target player protects using a card effect" do
+      before do
+        @game.use_card_effect(@second_player.lord_name, CardType::VAILLANCE)
+      end
+
+      it "should not have applied the card attacker effect" do
+        expect(@second_player.spare.map(&:name)).to include target_card_type
+      end
+
+      it "should went back to PlayCards state" do
+        expect(@game.state).to be_instance_of PlayCards
+      end
+    end
+
     describe "when target player wants to protect him discarding a counter card" do
 
       it "should raise if anyone else than target player discards" do
@@ -65,7 +108,8 @@ RSpec.describe ParryableAttackState do
         }.to raise_error Sbires::Error
       end
 
-      # TODO it should also be parried by
+      # TODO it should also be parried by a discarded card
+
     end
   end
 end

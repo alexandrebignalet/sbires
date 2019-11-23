@@ -74,6 +74,16 @@ class Game
     state.draw_card(lord_name, card_name, play_params)
   end
 
+  def use_card_effect(lord_name, card_name)
+    player = find_player lord_name
+    card = player.find_card_in_spare card_name
+
+    # specific to VAILLANCE handling
+    raise Sbires::Error, "There is nothing to protect against" unless state.is_a?(ParryableAttackState)
+    card.use!
+    transition_to PlayCards.new self
+  end
+
   def discard_spare_card(lord_name, card_name)
     state.discard_spare_card(lord_name, card_name)
   end
@@ -137,10 +147,14 @@ class Game
     next_p
   end
 
-  def tap_card(lord_name, card_name)
+  def do_not_protect(lord_name)
     player = find_player lord_name
-    raise Sbires::Error, "Not your turn" unless current_player == player
-    card = player.find_card_in_spare card_name
+    raise Sbires::Error, "No attack to parry" unless state.is_a? ParryableAttackState
+    raise Sbires::Error, "You are not attacked" unless player == state.target_player
+
+    state.run_effect
+
+    transition_to PlayCards.new self
   end
 
   private

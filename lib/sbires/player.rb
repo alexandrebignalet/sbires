@@ -81,7 +81,8 @@ class Player
   end
 
   def find_card_in_spare(card_name)
-    card = spare.detect { |c| c.name == card_name }
+    spare_with_atout = atout.nil? ? spare : [*spare, atout]
+    card = spare_with_atout.detect { |c| c.name == card_name }
     raise Sbires::Error, "You don't have a card #{card_name} in spare" if card.nil?
     card
   end

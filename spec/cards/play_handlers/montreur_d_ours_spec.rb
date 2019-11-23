@@ -65,19 +65,33 @@ RSpec.describe PlayHandlers::MontreurDours do
                       target_player: @second_player.lord_name)
     end
 
-    it "should place the target player targetted demonstration card in the neighbour discard" do
-      actual_discard_size = chateau_neighbour.discard.count
-
-      expect(actual_discard_size).to eq(@init_discard_size + 2)
+    it "should place the game in parryable attack state" do
+      expect(@game.state).to be_instance_of ParryableAttackState
     end
 
-    it "should discard the played card after usage" do
-      actual_player_cards_count = @first_player.cards.size
-      expect(actual_player_cards_count).to eq(@init_player_cards_count - 1)
+    context  "when the play is not countered" do
+      before do
+        @game.do_not_protect(@second_player.lord_name)
+      end
+
+      it "should place the target player targetted demonstration card in the neighbour discard" do
+        actual_discard_size = chateau_neighbour.discard.count
+
+        expect(actual_discard_size).to eq(@init_discard_size + 2)
+      end
+
+      it "should discard the played card after usage" do
+        actual_player_cards_count = @first_player.cards.size
+        expect(actual_player_cards_count).to eq(@init_player_cards_count - 1)
+      end
+
+      it "should end current player turn" do
+        expect(@game.current_player).to eq(@second_player)
+      end
     end
 
-    it "should end current player turn" do
-      expect(@game.current_player).to eq(@second_player)
+    context "when the play is countered" do
+
     end
   end
 end

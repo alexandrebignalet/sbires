@@ -1,13 +1,18 @@
 class ParryableAttackState < PlayCards
   attr_reader :target_player, :attack_card
 
-  def initialize(game, target_player, attack_card)
+  def initialize(game, target_player, attack_card, effect)
     @target_player = target_player
     @attack_card = attack_card
+    @effect = effect
   end
 
   def draw_card(lord_name, card_name, play_params = {})
     raise Sbires::Error, "You should not draw card on parryable attack state"
+  end
+
+  def run_effect
+    @effect.call
   end
 
   def discard_spare_card(lord_name, card_name)

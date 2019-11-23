@@ -7,6 +7,14 @@ class Card
     params.each { |key, value| instance_variable_set("@#{key}", value) }
   end
 
+  def use!
+    @used = true
+  end
+
+  def used?
+    @used
+  end
+
   def equipment?
     !!(min_touch && min_block)
   end
