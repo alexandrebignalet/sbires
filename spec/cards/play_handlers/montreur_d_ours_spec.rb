@@ -57,7 +57,14 @@ RSpec.describe PlayHandlers::MontreurDours do
     before do
       @init_discard_size = chateau_neighbour.discard.size
       @init_player_cards_count = @first_player.cards.size
+
       @second_player.spare << Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_AMUSEUR)
+
+      @first_player.cards << Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_AMUSEUR)
+      @game.draw_card(@first_player.lord_name, CardType::DEMONSTRATION_AMUSEUR)
+
+      @second_player.cards << Card.new(@second_player.lord_name, CardType::VAILLANCE)
+      @game.draw_card(@second_player.lord_name, CardType::VAILLANCE)
 
       @game.draw_card(@first_player.lord_name,
                       CardType::MONTREUR_DOURS,
@@ -91,7 +98,17 @@ RSpec.describe PlayHandlers::MontreurDours do
     end
 
     context "when the play is countered" do
+      before do
+        @game.use_card_effect(@second_player.lord_name, CardType::VAILLANCE)
+      end
 
+      it "should not affect targetted player" do
+        expect(@second_player.spare.map(&:name)).to include(CardType::DEMONSTRATION_AMUSEUR)
+      end
+
+      it "should have ended player turn" do
+        expect(@game.current_player).to eq(@second_player)
+      end
     end
   end
 end

@@ -8,6 +8,7 @@ class Card
   end
 
   def use!
+    raise Sbires::Error, "Card #{name} already used" if @used
     @used = true
   end
 

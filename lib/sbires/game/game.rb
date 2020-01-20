@@ -75,13 +75,8 @@ class Game
   end
 
   def use_card_effect(lord_name, card_name)
-    player = find_player lord_name
-    card = player.find_card_in_spare card_name
-
-    # specific to VAILLANCE handling
     raise Sbires::Error, "There is nothing to protect against" unless state.is_a?(ParryableAttackState)
-    card.use!
-    transition_to PlayCards.new self
+    state.use_card_effect(lord_name, card_name)
   end
 
   def discard_spare_card(lord_name, card_name)

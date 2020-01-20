@@ -82,6 +82,21 @@ RSpec.describe ParryableAttackState do
       it "should went back to PlayCards state" do
         expect(@game.state).to be_instance_of PlayCards
       end
+
+      describe "when the player wants to use a card twice in a day" do
+        before do
+          @second_player.cards << Card.new(NeighbourType::CHATEAU, CardType::DEMONSTRATION_FABULISTE)
+          @game.draw_card(@second_player.lord_name, CardType::DEMONSTRATION_FABULISTE)
+
+          @first_player.cards << Card.new(NeighbourType::CHATEAU, CardType::MONTREUR_DOURS)
+          @game.draw_card(@first_player.lord_name, CardType::MONTREUR_DOURS, target_card: CardType::DEMONSTRATION_AMUSEUR, target_player: @second_player.lord_name)
+        end
+
+        it "should not use twice a card effect during a day" do
+          expect { @game.use_card_effect(@second_player.lord_name, CardType::VAILLANCE) }.to raise_error Sbires::Error
+        end
+
+      end
     end
 
     describe "when target player wants to protect him discarding a counter card" do
@@ -107,9 +122,6 @@ RSpec.describe ParryableAttackState do
           @game.discard_spare_card(@second_player.lord_name, CardType::PENITENT)
         }.to raise_error Sbires::Error
       end
-
-      # TODO it should also be parried by a discarded card
-
     end
   end
 end

@@ -2,6 +2,8 @@ module PlayHandlers
   class MontreurDours
     def run(play)
       game = play.game
+      raise Sbires::Error, "Not your turn" unless play.submitter == game.current_player
+
       target_card_type = play.params[:target_card]
       target_player = game.find_player play.params[:target_player]
       raise Sbires::Error, "#{self.class.name}: You must target an opponent" if target_player == game.current_player
@@ -12,7 +14,7 @@ module PlayHandlers
 
       effect = ->() { card_effect(game, play, target_card, target_player, target_neighbour) }
 
-      game.transition_to ParryableAttackState.new(@game, target_player, play.card, effect)
+      game.transition_to ParryableAttackState.new(game, target_player, play.card, effect)
     end
 
     def listen_to(card)
