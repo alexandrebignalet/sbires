@@ -11,6 +11,7 @@ module Cards
     require 'sbires/cards/play_handlers/priere'
     require 'sbires/cards/play_handlers/equipment'
     require 'sbires/cards/play_handlers/montreur_dours'
+    require 'sbires/cards/play_handlers/vaillance'
   end
 
   module Middlewares

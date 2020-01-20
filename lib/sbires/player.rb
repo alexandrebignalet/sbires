@@ -3,7 +3,7 @@ class Player
   INITIAL_POINT_NUMBER = 5
   SPARE_MAX_CAPACITY = 8
 
-  attr_reader :name, :lord_name, :pawns, :points, :cards, :spare
+  attr_reader :name, :lord_name, :pawns, :points, :cards, :spare, :atout
 
   def initialize(name, lord_name, points: INITIAL_POINT_NUMBER,
                                   pawns: (0...PAWN_PER_PLAYER).map { Pawn.new(lord_name) },
@@ -15,6 +15,11 @@ class Player
     @pawns = pawns
     @cards = cards
     @spare = spare
+    @atout = nil
+  end
+
+  def change_atout(atout)
+    @atout = atout
   end
 
   def three_demonstration_in_spare?
@@ -76,7 +81,8 @@ class Player
   end
 
   def find_card_in_spare(card_name)
-    card = spare.detect { |c| c.name == card_name }
+    spare_with_atout = atout.nil? ? spare : [*spare, atout]
+    card = spare_with_atout.detect { |c| c.name == card_name }
     raise Sbires::Error, "You don't have a card #{card_name} in spare" if card.nil?
     card
   end

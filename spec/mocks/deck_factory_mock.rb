@@ -23,6 +23,16 @@ class DeckFactoryMock
         NeighbourType::TAVERNE => (0...Neighbour::CARD_NUMBER_PER_NEIGHBOUR).map { Card.new(NeighbourType::TAVERNE, CardType::BAGARRE_GENERALE) }
     }
   end
+  
+  def self.random_deck
+    {
+        NeighbourType::CHATEAU => DeckFactory.create_chateau_cards,
+        NeighbourType::EGLISE => DeckFactory.create_eglise_cards,
+        NeighbourType::GRAND_PLACE => DeckFactory.create_grand_place_cards,
+        NeighbourType::SALLE_D_ARMES => DeckFactory.create_salle_d_armes_cards,
+        NeighbourType::TAVERNE => DeckFactory.create_taverne_cards
+    }
+  end
 
   def self.duel_deck
     {
@@ -54,13 +64,7 @@ class DeckFactoryMock
   end
 
   def self.card_on_top(neighbour_type, card_type)
-    deck = {
-        NeighbourType::CHATEAU => DeckFactory.create_chateau_cards,
-        NeighbourType::EGLISE => DeckFactory.create_eglise_cards,
-        NeighbourType::GRAND_PLACE => DeckFactory.create_grand_place_cards,
-        NeighbourType::SALLE_D_ARMES => DeckFactory.create_salle_d_armes_cards,
-        NeighbourType::TAVERNE => DeckFactory.create_taverne_cards
-    }
+    deck = random_deck
 
     deck[neighbour_type] = deck[neighbour_type].unshift(Card.new(neighbour_type, card_type)).take(26)
     

@@ -11,7 +11,10 @@ class Game
   MIN_PLAYERS_IN_GAME = 2
   MAX_PLAYERS_IN_GAME = 5
 
-  attr_reader :players, :neighbours, :state, :play_mediator, :current_day, :day_skippers, :current_player_index, :id
+  attr_reader :players, :neighbours,
+              :state, :play_mediator,
+              :current_day, :day_skippers,
+              :current_player_index, :id
 
   def self.prepare_players(player_names)
     remaining_lord_names = Game::LORD_NAMES.dup
@@ -69,6 +72,11 @@ class Game
   ###### PLAY CARDS ##########
   def draw_card(lord_name, card_name, play_params = {})
     state.draw_card(lord_name, card_name, play_params)
+  end
+
+  def use_card_effect(lord_name, card_name)
+    raise Sbires::Error, "There is nothing to protect against" unless state.is_a?(ParryableAttackState)
+    state.use_card_effect(lord_name, card_name)
   end
 
   def discard_spare_card(lord_name, card_name)
@@ -132,6 +140,16 @@ class Game
     end
 
     next_p
+  end
+
+  def do_not_protect(lord_name)
+    player = find_player lord_name
+    raise Sbires::Error, "No attack to parry" unless state.is_a? ParryableAttackState
+    raise Sbires::Error, "You are not attacked" unless player == state.target_player
+
+    state.run_effect
+
+    transition_to PlayCards.new self
   end
 
   private

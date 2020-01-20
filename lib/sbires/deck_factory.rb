@@ -72,7 +72,7 @@ class DeckFactory
 
         Card.new(NeighbourType::GRAND_PLACE, CardType::VIEILLE_DAME),
 
-        Card.new(NeighbourType::GRAND_PLACE, CardType::VAILLANCE)
+        Card.new(NeighbourType::GRAND_PLACE, CardType::VAILLANCE, used: false)
     ]
   end
 

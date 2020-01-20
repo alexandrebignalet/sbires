@@ -7,11 +7,24 @@ class Card
     params.each { |key, value| instance_variable_set("@#{key}", value) }
   end
 
+  def use!
+    raise Sbires::Error, "Card #{name} already used" if @used
+    @used = true
+  end
+
+  def used?
+    @used
+  end
+
   def equipment?
     !!(min_touch && min_block)
   end
 
   def buff?
     !!@buff
+  end
+
+  def is_parried_by?(card_name)
+    @parried_by.include?(card_name)
   end
 end

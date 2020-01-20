@@ -9,6 +9,7 @@ module Sbires
   require 'sbires/game/states/play_cards'
   require 'sbires/game/states/pawn_placement'
   require 'sbires/game/states/bagarre_generale_state'
+  require 'sbires/game/states/parryable_attack_state'
   require 'sbires/game/states/duel/duel'
   require 'sbires/game/states/duel/duelist'
   require 'sbires/game/states/duel/attacker'

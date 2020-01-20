@@ -1,11 +1,37 @@
-def start_two_players_game(deck, pawns_repartition)
+def start_two_players_game(deck, pawns_repartition = nil)
   allow_any_instance_of(DeckFactory).to receive(:factories).and_return(deck)
   players = Game.prepare_players(%w(jean francois))
   @game = Game.new(players)
   @first_player = @game.current_player
   @second_player = @game.players.detect { |p| p != @first_player }
 
-  pawn_placement(pawns_repartition)
+  pawns_repartition.nil? ? default_pawns_placement : pawn_placement(pawns_repartition)
+end
+
+def default_pawns_placement
+  @game.place_pawn(@first_player.lord_name, NeighbourType::SALLE_D_ARMES)
+  @game.place_pawn(@second_player.lord_name, NeighbourType::SALLE_D_ARMES)
+
+  @game.place_pawn(@first_player.lord_name, NeighbourType::SALLE_D_ARMES)
+  @game.place_pawn(@second_player.lord_name, NeighbourType::EGLISE)
+
+  @game.place_pawn(@first_player.lord_name, NeighbourType::CHATEAU)
+  @game.place_pawn(@second_player.lord_name, NeighbourType::EGLISE)
+
+  @game.place_pawn(@first_player.lord_name, NeighbourType::CHATEAU)
+  @game.place_pawn(@second_player.lord_name, NeighbourType::SALLE_D_ARMES)
+
+  @game.place_pawn(@first_player.lord_name, NeighbourType::CHATEAU)
+  @game.place_pawn(@second_player.lord_name, NeighbourType::GRAND_PLACE)
+
+  @game.place_pawn(@first_player.lord_name, NeighbourType::CHATEAU)
+  @game.place_pawn(@second_player.lord_name, NeighbourType::EGLISE)
+
+  @game.place_pawn(@first_player.lord_name, NeighbourType::TAVERNE)
+  @game.place_pawn(@second_player.lord_name, NeighbourType::GRAND_PLACE)
+
+  @game.place_pawn(@first_player.lord_name, NeighbourType::GRAND_PLACE)
+  @game.place_pawn(@second_player.lord_name, NeighbourType::TAVERNE)
 end
 
 def pawn_placement(pawns_repartition)
